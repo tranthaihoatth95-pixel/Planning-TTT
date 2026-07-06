@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Thi Công — Đa dự án</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
@@ -17,18 +17,8 @@
   *{box-sizing:border-box;}
   html{color-scheme:light;}
   html,body{margin:0;padding:0;}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;padding:20px 16px 60px;-webkit-font-smoothing:antialiased;-webkit-touch-callout:none;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;padding:20px 16px 60px;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:1120px;margin:0 auto;}
-
-  @media(screen-spanning:single-fold-vertical){
-    .wrap{display:grid;grid-template-columns:env(viewport-segment-width 0 0) env(viewport-segment-width 1 0);gap:10px;}
-  }
-
-  /* Responsive cho foldable device */
-  @media(max-width:512px){
-    body{padding:12px 8px 40px;}
-    .wrap{max-width:100%;}
-  }
 
   header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;background:var(--panel);border:1px solid var(--panel-line);border-radius:16px;box-shadow:var(--shadow);padding:20px 22px;margin-bottom:18px;}
   .htitle{font-weight:800;font-size:1.45rem;letter-spacing:-0.02em;line-height:1.2;}
@@ -38,6 +28,7 @@
   .date-set input{background:var(--bg2);border:1px solid var(--panel-line);color:var(--ink);padding:6px 9px;border-radius:9px;font-family:'Inter',sans-serif;font-size:.8rem;}
   .clock{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--cyan);font-weight:500;}
 
+  /* Project bar */
   .proj-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
   .proj-bar select{background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);padding:8px 12px;border-radius:10px;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;min-width:220px;box-shadow:var(--shadow);}
   .proj-btn{font-size:.76rem;font-weight:600;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink-dim);padding:8px 12px;border-radius:10px;cursor:pointer;box-shadow:var(--shadow);}
@@ -76,15 +67,16 @@
   .sec-title{font-weight:700;font-size:1.05rem;color:var(--ink);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
   .sec-note{font-size:.72rem;color:var(--ink-dim);font-weight:400;flex-basis:100%;order:3;}
   @media(min-width:800px){.sec-note{flex-basis:auto;order:0;}}
-  .reset-btn{font-size:.74rem;font-weight:600;background:var(--bg2);border:1px solid var(--panel-line);color:var(--ink-dim);padding:6px 12px;border-radius:9px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;touch-action:manipulation;}
+  .reset-btn{font-size:.74rem;font-weight:600;background:var(--bg2);border:1px solid var(--panel-line);color:var(--ink-dim);padding:6px 12px;border-radius:9px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
   .reset-btn:hover{border-color:var(--cyan);color:var(--cyan);background:#eef3ff;}
   .add-task-panel{display:none;}
   .add-task-panel.show{display:block;}
   .add-task-panel .control-card input{width:100%;}
 
+  /* Gantt rows */
   .gantt-scale{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-dim);margin-bottom:8px;}
   .gantt-bar{display:flex;flex-direction:column;gap:5px;}
-  .grow{display:grid;grid-template-columns:64px 1fr 52px;align-items:center;gap:8px;cursor:pointer;border-radius:8px;padding:1px 2px;touch-action:manipulation;}
+  .grow{display:grid;grid-template-columns:64px 1fr 52px;align-items:center;gap:8px;cursor:pointer;border-radius:8px;padding:1px 2px;}
   .grow:hover{background:#eef3ff;}
   @media(max-width:600px){.grow{grid-template-columns:52px 1fr 46px;gap:6px;}}
   .grow-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--ink-dim);white-space:nowrap;overflow:hidden;}
@@ -109,6 +101,24 @@
   .control-card input:focus{border-color:var(--cyan);outline:none;}
   .control-card .hint{font-size:.7rem;color:var(--ink-dim);margin-top:6px;line-height:1.5;}
 
+  .crew-warn{font-size:.74rem;color:var(--red);margin:4px 0 10px;font-weight:500;}
+  .crew-detail-list{display:flex;flex-direction:column;max-height:340px;overflow-y:auto;}
+  .crew-detail-row{display:grid;grid-template-columns:64px 1fr 90px 66px 54px;align-items:center;gap:10px;font-size:.8rem;padding:8px 0;border-bottom:1px solid var(--bg2);}
+  .crew-detail-row:last-child{border-bottom:none;}
+  @media(max-width:700px){.crew-detail-row{grid-template-columns:52px 1fr 56px 58px 46px;gap:6px;}}
+  .crew-detail-id{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:.72rem;font-weight:700;}
+  .crew-detail-task{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
+  .crew-detail-row.status-done .crew-detail-task{color:var(--ink-dim);text-decoration:line-through;}
+  .crew-detail-row.status-doing .crew-detail-id{color:var(--amber);}
+  .mini-badge{font-size:.58rem;color:var(--purple);border:1px solid var(--purple);border-radius:8px;padding:0 5px;font-weight:600;}
+  .crew-track{background:var(--bg2);border-radius:6px;height:8px;overflow:hidden;}
+  .crew-fill{height:100%;background:var(--cyan);transition:width .3s;border-radius:6px;}
+  .crew-fill.over{background:var(--red);}
+  .crew-num{font-family:'JetBrains Mono',monospace;font-size:.74rem;text-align:right;color:var(--ink);font-weight:500;}
+  .crew-num.over-text{color:var(--red);}
+  .crew-dur{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--orange);text-align:right;font-weight:600;}
+
+  .timeline{position:relative;padding-left:22px;border-left:2px solid var(--panel-line);display:flex;flex-direction:column;}
   .wp-card{position:relative;background:var(--panel);border:1px solid var(--panel-line);border-radius:14px;padding:14px 16px 14px 40px;box-shadow:var(--shadow);transition:border-color .12s,box-shadow .12s;}
   .wp-card::before{content:"";position:absolute;left:-29px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:3px solid #c3c9d6;}
   .wp-card.status-doing::before{border-color:var(--amber);background:var(--amber);}
@@ -117,6 +127,14 @@
   .wp-card.status-doing{border-color:var(--amber);}
   .wp-card.status-done{background:#f6fbf8;}
   .wp-card.overdue{border-color:var(--red);}
+  .wp-card.dragging{opacity:.4;}
+  .wp-card.drag-over-top{box-shadow:inset 0 3px 0 var(--purple),var(--shadow);}
+  .wp-card.drag-over-bottom{box-shadow:inset 0 -3px 0 var(--purple),var(--shadow);}
+  .wp-card.flash{animation:flashHl 1.6s ease;}
+  @keyframes flashHl{0%{box-shadow:0 0 0 4px rgba(59,110,246,.55);}100%{box-shadow:var(--shadow);}}
+
+  .drag-handle{position:absolute;left:10px;top:14px;bottom:14px;width:18px;display:flex;align-items:center;justify-content:center;color:#c3c9d6;cursor:grab;font-size:1rem;user-select:none;}
+  .drag-handle:hover{color:var(--cyan);}
 
   .wp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;}
   .wp-code{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--cyan);font-size:.82rem;}
@@ -125,386 +143,1570 @@
   .wp-badge.doing{color:#8a5a00;background:#fdf3dd;}
   .wp-badge.done{color:#0c6b36;background:#e3f5ea;}
   .wp-badge.overdue{color:#9b1c1c;background:#fde3e3;}
+  .custom-badge{color:var(--purple);background:#f1ebfd;}
+  .edited-badge{color:var(--cyan);background:#e8efff;}
+  .parallel-badge{color:var(--purple);background:#f1ebfd;}
+  .par-btn{width:26px;height:26px;border-radius:8px;border:1px solid var(--panel-line);background:var(--panel);color:var(--ink-dim);cursor:pointer;font-size:.85rem;font-weight:700;}
+  .par-btn:hover{border-color:var(--purple);color:var(--purple);}
+  .par-btn.on{background:var(--purple);border-color:var(--purple);color:#fff;}
+  .gap-node{display:flex;align-items:center;gap:8px;margin:8px 0 8px -22px;padding-left:6px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-dim);}
+  .gap-node .line{flex:0 0 16px;height:2px;background:var(--panel-line);border-radius:2px;}
+  .gap-node input{width:64px;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);padding:4px 8px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+  .gap-node.active{color:var(--purple);}
+  .gap-node.active .line{background:var(--purple);}
+  .gap-node.par-link{color:var(--purple);font-weight:600;}
+  .gap-node.par-link .line{background:var(--purple);}
 
   .wp-task{font-weight:700;font-size:.95rem;margin-top:8px;}
   .wp-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:.78rem;color:var(--ink-dim);}
   .wp-meta b{color:var(--ink);font-weight:600;}
   .wp-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:10px;}
   .wp-controls{display:flex;gap:6px;flex:1;min-width:220px;}
-  .wp-btn{flex:1;font-size:.72rem;font-weight:600;padding:7px 6px;border-radius:9px;background:var(--bg2);border:1px solid transparent;color:var(--ink-dim);cursor:pointer;font-family:'Inter',sans-serif;touch-action:manipulation;}
+  .wp-btn{flex:1;font-size:.72rem;font-weight:600;padding:7px 6px;border-radius:9px;background:var(--bg2);border:1px solid transparent;color:var(--ink-dim);cursor:pointer;font-family:'Inter',sans-serif;}
   .wp-btn.active-todo{background:#e3e7f0;color:var(--ink);}
   .wp-btn.active-doing{background:var(--amber);color:#fff;}
   .wp-btn.active-done{background:var(--green);color:#fff;}
+  .crew-stepper{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.76rem;}
+  .step-btn{width:26px;height:26px;border-radius:8px;border:1px solid var(--panel-line);background:var(--panel);color:var(--ink);cursor:pointer;font-weight:600;}
+  .step-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+  .crew-val{min-width:56px;text-align:center;font-weight:600;}
+  .speed-tag{font-size:.64rem;padding:2px 8px;border-radius:20px;font-weight:700;background:var(--bg2);color:var(--ink-dim);}
+  .speed-tag.fast{color:#0c6b36;background:#e3f5ea;}
+  .speed-tag.slow{color:#9b1c1c;background:#fde3e3;}
 
-  .detail-btn{font-size:.68rem;font-weight:600;background:#f1ebfd;border:none;color:var(--purple);padding:4px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;touch-action:manipulation;}
+  .edit-task-btn{font-size:.68rem;font-weight:600;background:#e8efff;border:none;color:var(--cyan);padding:4px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .edit-task-btn:hover{background:var(--cyan);color:#fff;}
+  .del-task-btn{font-size:.68rem;font-weight:600;background:#fde3e3;border:none;color:var(--red);padding:4px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .del-task-btn:hover{background:var(--red);color:#fff;}
+  .detail-btn{font-size:.68rem;font-weight:600;background:#f1ebfd;border:none;color:var(--purple);padding:4px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;}
   .detail-btn:hover{background:var(--purple);color:#fff;}
   .detail-btn.open{background:var(--purple);color:#fff;}
 
+  .wp-edit-form{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+  .wp-edit-form label{font-size:.66rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;font-weight:600;}
+  .wp-edit-form input{width:100%;background:var(--bg2);border:1px solid var(--panel-line);color:var(--ink);padding:8px 10px;border-radius:9px;font-size:.85rem;font-family:'Inter',sans-serif;}
+  .wp-edit-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(max-width:600px){.wp-edit-row{grid-template-columns:1fr;}}
+  .wp-edit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .save-edit-btn{background:#e3f5ea;color:var(--green);}
+  .save-edit-btn:hover{background:var(--green);color:#fff;}
+
+  /* Detail panel */
   .wp-detail{margin-top:14px;border-top:1px dashed var(--panel-line);padding-top:12px;display:flex;flex-direction:column;gap:14px;}
   .wp-detail h4{margin:0 0 8px;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-dim);}
   .wp-detail textarea{width:100%;min-height:70px;background:var(--bg2);border:1px solid var(--panel-line);border-radius:10px;padding:10px;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--ink);resize:vertical;}
   .wp-detail textarea:focus{border-color:var(--cyan);outline:none;}
+  .cat-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .cat-row select{background:var(--bg2);border:1px solid var(--panel-line);border-radius:9px;padding:7px 10px;font-size:.82rem;font-family:'Inter',sans-serif;color:var(--ink);}
+  .todo-list{display:flex;flex-direction:column;gap:6px;}
+  .todo-item{display:flex;align-items:center;gap:8px;font-size:.85rem;background:var(--bg2);border-radius:9px;padding:7px 10px;}
+  .todo-item input[type=checkbox]{accent-color:var(--green);width:16px;height:16px;flex-shrink:0;}
+  .todo-item.done span{text-decoration:line-through;color:var(--ink-dim);}
+  .todo-item span{flex:1;}
+  .todo-del{background:none;border:none;color:var(--ink-dim);cursor:pointer;font-size:.85rem;}
+  .todo-del:hover{color:var(--red);}
+  .todo-add{display:flex;gap:8px;}
+  .todo-add input{flex:1;background:var(--bg2);border:1px solid var(--panel-line);border-radius:9px;padding:8px 10px;font-size:.85rem;font-family:'Inter',sans-serif;}
+  .habit-hint{font-size:.72rem;color:var(--purple);font-weight:500;}
+
+  .dropzone{border:2px dashed var(--panel-line);border-radius:12px;padding:18px;text-align:center;font-size:.8rem;color:var(--ink-dim);transition:all .15s;cursor:pointer;}
+  .dropzone.dragover{border-color:var(--cyan);background:#eef3ff;color:var(--cyan);}
+  .att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:10px;}
+  .att-item{position:relative;background:var(--bg2);border:1px solid var(--panel-line);border-radius:10px;overflow:hidden;}
+  .att-item img,.att-item video{width:100%;height:80px;object-fit:cover;display:block;}
+  .att-file{height:80px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+  .att-name{font-size:.62rem;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-dim);}
+  .att-del{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:.7rem;cursor:pointer;line-height:1;}
+  .att-del:hover{background:var(--red);}
+  .att-note{font-size:.68rem;color:var(--ink-dim);margin-top:6px;}
 
   .risk-list{display:flex;flex-direction:column;}
-  .risk-row{display:grid;grid-template-columns:28px 1fr 1fr 110px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--bg2);font-size:.84rem;touch-action:manipulation;}
+  .risk-row{display:grid;grid-template-columns:28px 1fr 1fr 110px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--bg2);font-size:.84rem;}
   .risk-row:last-child{border-bottom:none;}
   @media(max-width:760px){.risk-row{grid-template-columns:26px 1fr;grid-template-rows:auto auto;}}
+  .risk-num{font-family:'JetBrains Mono',monospace;color:var(--ink-dim);font-size:.74rem;font-weight:700;}
+  .risk-name{font-weight:600;}
+  .risk-fix{color:var(--ink-dim);font-size:.8rem;}
+  .risk-toggle{display:flex;align-items:center;gap:6px;justify-content:flex-end;cursor:pointer;font-size:.72rem;font-weight:600;color:var(--ink-dim);}
+  .risk-toggle input{accent-color:var(--green);width:16px;height:16px;}
+  .risk-toggle.applied{color:var(--green);}
 
   footer{margin-top:8px;text-align:center;font-size:.72rem;color:var(--ink-dim);font-weight:500;}
 
+  /* PDF report (rendered off-screen for html2pdf) */
   #reportView{position:fixed;left:-11000px;top:0;width:794px;background:#fff;z-index:-1;}
+  .rp{font-family:'Inter',sans-serif;color:#111;font-size:11pt;line-height:1.55;padding:24px;background:#fff;}
+  .rp h1{font-size:16pt;margin:0 0 2px;}
+  .rp .rp-sub{font-size:9pt;color:#555;margin-bottom:14px;}
+  .rp h2{font-size:12pt;margin:16px 0 6px;border-bottom:1.5px solid #222;padding-bottom:3px;}
+  .rp table{width:100%;border-collapse:collapse;font-size:9pt;margin-top:4px;}
+  .rp th,.rp td{border:1px solid #bbb;padding:4px 6px;text-align:left;vertical-align:top;}
+  .rp th{background:#eee;font-weight:700;}
+  .rp .rp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}
+  .rp .rp-stat{border:1px solid #bbb;border-radius:6px;padding:8px 10px;}
+  .rp .rp-stat b{display:block;font-size:13pt;}
+  .rp .rp-stat span{font-size:8pt;color:#555;}
+  .rp ul{margin:4px 0;padding-left:18px;}
+  .rp li{margin-bottom:3px;font-size:9.5pt;}
+  .rp .tag-late{color:#b91c1c;font-weight:700;}
+  .rp .tag-ok{color:#15803d;font-weight:700;}
+  .rp .rp-foot{margin-top:16px;font-size:8pt;color:#777;border-top:1px solid #ccc;padding-top:6px;}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="proj-bar">
+    <select id="projectSelect"></select>
+    <button class="proj-btn" id="newProjBtn">+ Dự án mới</button>
+    <button class="proj-btn" id="renameProjBtn">✎ Đổi tên</button>
+    <button class="proj-btn" id="delProjBtn">🗑 Xóa dự án</button>
+    <button class="proj-btn" id="saveTplBtn">💾 Lưu làm template</button>
+    <button class="proj-btn" id="importToggleBtn">🤖 Import báo cáo → lên plan</button>
+  </div>
+  <div class="proj-panel" id="newProjPanel">
+    <div class="row">
+      <div><label>Tên dự án mới</label><input type="text" id="newProjName" placeholder="VD: Cải tạo văn phòng ABC" maxlength="80"></div>
+      <div><label>Khởi tạo từ</label><select id="newProjTemplate"></select></div>
+      <button class="reset-btn" id="createProjBtn" style="height:38px;">Tạo dự án</button>
+    </div>
+  </div>
+  <div class="proj-panel" id="importPanel">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-weight:700;font-size:.95rem;">🤖 Import báo cáo → AI tự lên plan &amp; action tiếp theo</div>
+      <div style="font-size:.76rem;color:var(--ink-dim);">Tải lên báo cáo PDF đã xuất từ dashboard (hoặc dán nội dung báo cáo/biên bản họp) — hệ thống sẽ đọc, tóm tắt tình hình và đề xuất kế hoạch giai đoạn tiếp theo thành một dự án mới sẵn sàng triển khai.</div>
+      <div id="importKeyRow" style="display:none;">
+        <label>Anthropic API key (bắt buộc trên bản web — chỉ lưu trong trình duyệt này, không gửi đi đâu khác ngoài api.anthropic.com)</label>
+        <input type="password" id="importApiKey" placeholder="sk-ant-…" autocomplete="off" style="width:100%;background:var(--bg2);border:1px solid var(--panel-line);color:var(--ink);padding:8px 10px;border-radius:9px;font-size:.88rem;font-family:'JetBrains Mono',monospace;">
+      </div>
+      <div class="row" style="grid-template-columns:1fr 1fr;">
+        <div><label>File báo cáo (PDF / TXT)</label><input type="file" id="importFile" accept=".pdf,.txt,.md"></div>
+        <div><label>Mục tiêu giai đoạn tới (tuỳ chọn)</label><input type="text" id="importGoal" placeholder="VD: hoàn tất punchlist và bàn giao trong 1 ngày" maxlength="200"></div>
+      </div>
+      <div><label>Hoặc dán nội dung báo cáo</label><textarea id="importText" placeholder="Dán nội dung báo cáo, biên bản, ghi chú buổi làm việc…" style="width:100%;min-height:90px;background:var(--bg2);border:1px solid var(--panel-line);border-radius:10px;padding:10px;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--ink);resize:vertical;"></textarea></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="reset-btn" id="importRunBtn">⚡ Phân tích &amp; lên plan</button>
+        <span id="importStatus" style="font-size:.76rem;color:var(--ink-dim);"></span>
+      </div>
+      <div id="importResult" style="display:none;background:var(--bg2);border:1px solid var(--panel-line);border-radius:12px;padding:14px;"></div>
+    </div>
+  </div>
+
   <header>
     <div>
-      <h1 class="htitle">Planning <span>TTT</span></h1>
-      <p class="hsub">Quản lý dự án & cảnh báo xử lý</p>
+      <div class="htitle" id="projTitle">Thi Công <span>—</span></div>
+      <div class="hsub" id="hsub">Đang tải…</div>
     </div>
-    <div class="date-set">
-      <span class="clock" id="clockDisplay">00:00:00 Thu 1</span>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+      <div class="date-set">Bắt đầu: <input type="date" id="startDate"></div>
+      <div class="date-set">Deadline bàn giao: <input type="datetime-local" id="deadlineInput"></div>
+      <div class="clock" id="clock">--:--:--</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--purple);">● Dữ liệu dùng chung — ai mở link cũng thấy cùng cập nhật</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--ink-dim);" id="syncStatus">Đang đồng bộ…</div>
+      <button class="reset-btn" id="exportPdfBtn" style="margin-top:4px;">📄 Xuất báo cáo PDF</button>
     </div>
   </header>
 
+  <div id="reportView"></div>
+
   <div class="countdown-bar">
-    <div class="cd-block" style="--cd:var(--cyan);">
-      <div class="cd-label">Deadline ban giao</div>
-      <div class="cd-value" id="cdDeadline">—</div>
-      <div class="cd-note">Chưa đặt deadline</div>
-    </div>
-    <div class="cd-block" style="--cd:var(--green);">
-      <div class="cd-label">Đề hoạn thành dự kiến</div>
-      <div class="cd-value ok" id="cdPlanned">—</div>
-      <div class="cd-note" id="cdNote1">Cần đặt ngày bắt đầu</div>
-    </div>
-    <div class="cd-block" style="--cd:var(--orange);">
-      <div class="cd-label">Dự kiến sớ với deadline</div>
-      <div class="cd-value" id="cdDelta">—</div>
-      <div class="cd-note" id="cdNote2">Cần cả deadline & dự kiến</div>
-    </div>
+    <div class="cd-block" style="--cd:var(--red)"><div class="cd-label">⏱ Đếm ngược đến deadline</div><div class="cd-value" id="cdDeadline">—</div><div class="cd-note" id="cdDeadlineNote">Chưa đặt deadline bàn giao</div></div>
+    <div class="cd-block" style="--cd:var(--cyan)"><div class="cd-label">🚧 Đến hoàn thành dự kiến</div><div class="cd-value" id="cdPlanned">—</div><div class="cd-note" id="cdPlannedNote">Theo lịch triển khai hiện tại</div></div>
+    <div class="cd-block" style="--cd:var(--green)"><div class="cd-label">⚖ Dự kiến so với deadline</div><div class="cd-value" id="cdDelta">—</div><div class="cd-note" id="cdDeltaNote">Cần cả ngày bắt đầu &amp; deadline</div></div>
   </div>
 
   <div class="reminder" id="reminderBox"><strong>⚠ Nhắc việc:</strong><ul id="reminderList"></ul></div>
 
-  <div class="stats" id="statsBox"></div>
+  <div class="stats">
+    <div class="stat-card" style="--accent:var(--cyan)"><div class="stat-label">Tiến độ tổng</div><div class="stat-value" id="statProgress">0%</div><div class="stat-note" id="statProgressNote">—</div></div>
+    <div class="stat-card" style="--accent:var(--amber)"><div class="stat-label">Đang chạy</div><div class="stat-value" id="statCurrent">—</div><div class="stat-note" id="statCurrentNote">Chưa đặt ngày bắt đầu</div></div>
+    <div class="stat-card" style="--accent:var(--red)"><div class="stat-label">Trễ tiến độ</div><div class="stat-value" id="statOverdue">0</div><div class="stat-note">giai đoạn quá giờ</div></div>
+    <div class="stat-card" style="--accent:var(--green)"><div class="stat-label">Rủi ro đã xử lý</div><div class="stat-value" id="statRisk">0/0</div><div class="stat-note">biện pháp áp dụng</div></div>
+    <div class="stat-card" style="--accent:var(--purple)"><div class="stat-label">Leadtime hiện tại</div><div class="stat-value" id="statLeadtime">—</div><div class="stat-note" id="statLeadtimeDelta">so với kế hoạch gốc</div></div>
+    <div class="stat-card" style="--accent:var(--orange)"><div class="stat-label">Tốc độ đẩy việc</div><div class="stat-value" id="statSpeed">1.0x</div><div class="stat-note" id="statSpeedNote">so với định biên gốc</div></div>
+  </div>
+
+  <section>
+    <div class="sec-title">Gantt tiến độ <span class="sec-note">bấm vào hàng bất kỳ để nhảy nhanh đến chi tiết công việc đó</span></div>
+    <div class="gantt-scale"><span id="ganttStart">Bắt đầu</span><span id="ganttEnd">Kết thúc</span></div>
+    <div class="gantt-bar" id="ganttBar"></div>
+    <div class="gantt-legend">
+      <span><span class="swatch" style="background:#b6bdcc"></span>Chưa làm</span>
+      <span><span class="swatch" style="background:var(--amber)"></span>Đang làm</span>
+      <span><span class="swatch" style="background:var(--green)"></span>Hoàn thành</span>
+      <span><span class="swatch" style="background:var(--red)"></span>Trễ hẹn</span>
+      <span><span class="swatch" style="background:#fff;outline:2px dashed var(--purple);outline-offset:-2px;"></span>⇉ Song song</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Điều chỉnh mô hình</div>
+    <div class="controls-row">
+      <div class="control-card"><label>Tổng lực lượng nhân sự sẵn có (người)</label><input type="number" id="crewCapacityInput" min="1" value="23"><div class="hint">Mốc so sánh cho headline &amp; cảnh báo vượt định biên</div></div>
+      <div class="control-card"><label>Giãn cách/nghỉ mặc định giữa mọi giai đoạn (phút)</label><input type="number" id="globalGap" min="0" step="5" value="0"><div class="hint">Áp cho điểm nối chưa chỉnh riêng dưới timeline</div></div>
+      <div class="control-card"><label>Leadtime kế hoạch gốc (tham chiếu)</label><input type="text" id="baselineDisplay" disabled style="opacity:.6"><div class="hint">Effort = giờ công gốc × định biên gốc; đổi nhân sự → thời gian tự tính lại</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Nhân sự &amp; thời lượng từng giai đoạn <span class="sec-note">đổi số người → thời lượng &amp; lịch trình tự tính lại ngay</span></div>
+    <div class="crew-detail-wrap" id="crewBars"></div>
+  </section>
 
   <section>
     <div class="sec-title">
-      Công việc
-      <button class="reset-btn" id="addTaskToggleBtn">+ Thêm công việc</button>
+      Timeline thi công <span class="sec-note">kéo ⠿ đổi thứ tự · ⇉ chạy song song · 📋 mở chi tiết: ghi chú, checklist, đính kèm</span>
+      <span style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="reset-btn" id="addTaskToggleBtn">+ Thêm công việc</button>
+        <button class="reset-btn" id="resetOrderBtn">↺ Thứ tự gốc</button>
+        <button class="reset-btn" id="removedToggleBtn" style="display:none;">🗑 Đã ẩn (<span id="removedCount">0</span>)</button>
+      </span>
     </div>
     <div class="add-task-panel" id="addTaskPanel">
-      <div class="controls-row">
-        <div class="control-card">
-          <label>Tên công việc *</label>
-          <input type="text" id="newTaskName" placeholder="Ví dụ: Chuẩn bị vật tư">
-        </div>
-        <div class="control-card">
-          <label>Deliverable</label>
-          <input type="text" id="newTaskDel" placeholder="Ví dụ: BOM 26g">
-        </div>
-        <div class="control-card">
-          <label>Crew (người)</label>
-          <input type="number" id="newTaskCrew" value="1" min="1">
-        </div>
-      </div>
-      <div class="controls-row">
-        <div class="control-card">
-          <label>Duration (giờ)</label>
-          <input type="number" id="newTaskHours" value="4" min="0.25" step="0.25">
-        </div>
-        <div class="control-card">
-          <label>Category</label>
-          <select id="newTaskCat">
-            <option value="Chưa phân loại">Chưa phân loại</option>
-            <option value="Che chắn / An toàn">Che chắn / An toàn</option>
-            <option value="Tháo dỡ">Tháo dỡ</option>
-            <option value="Vệ sinh">Vệ sinh</option>
-            <option value="MEP / Điện nước">MEP / Điện nước</option>
-            <option value="Hoàn thiện xây dựng">Hoàn thiện xây dựng</option>
-            <option value="Nội thất">Nội thất</option>
-            <option value="Sàn / Thảm">Sàn / Thảm</option>
-            <option value="Thiết bị">Thiết bị</option>
-            <option value="Nghiệm thu / Bàn giao">Nghiệm thu / Bàn giao</option>
-            <option value="Mua sắm vật tư">Mua sắm vật tư</option>
-            <option value="Khác">Khác</option>
-          </select>
-        </div>
-        <div class="control-card">
-          <button id="addTaskSubmitBtn" style="background:var(--green);color:#fff;border:none;border-radius:9px;padding:8px 12px;font-weight:600;cursor:pointer;width:100%;margin-top:22px;">Thêm</button>
+      <div class="control-card" style="margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:2fr 1.4fr .8fr .8fr auto;gap:10px;align-items:end;">
+          <div><label>Tên công việc</label><input type="text" id="newTaskName" placeholder="VD: Xử lý ẩm mốc trần" maxlength="120"></div>
+          <div><label>Deliverable (tuỳ chọn)</label><input type="text" id="newTaskDeliverable" placeholder="VD: Khu vực khô ráo"></div>
+          <div><label>Nhân sự</label><input type="number" id="newTaskCrew" min="1" value="2"></div>
+          <div><label>Thời lượng (giờ)</label><input type="number" id="newTaskDuration" min="0.25" step="0.25" value="1"></div>
+          <button class="reset-btn" id="addTaskSubmitBtn" style="height:36px;">Thêm vào timeline</button>
         </div>
       </div>
     </div>
-    <div class="gantt-bar" id="wpList"></div>
+    <div class="add-task-panel" id="removedPanel"><div class="control-card" style="margin-bottom:14px;" id="removedList"></div></div>
+    <div class="timeline" id="timeline"></div>
   </section>
 
   <section>
     <div class="sec-title">
-      Gantt Chart
-      <span class="sec-note">Timeline dự án</span>
+      Risk Register <span class="sec-note">thêm rủi ro mới phát hiện trong quá trình triển khai · sửa/xóa từng dòng · khôi phục về danh sách gốc</span>
+      <span style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="reset-btn" id="addRiskToggleBtn">+ Thêm rủi ro</button>
+        <button class="reset-btn" id="resetRiskBtn">↺ Khôi phục mặc định</button>
+      </span>
     </div>
-    <div class="gantt-scale" id="ganttScale"></div>
-    <div class="gantt-bar" id="ganttBox"></div>
-    <div class="gantt-legend">
-      <span><div class="swatch" style="background:#b6bdcc;"></div>Chưa làm</span>
-      <span><div class="swatch" style="background:var(--amber);"></div>Đang làm</span>
-      <span><div class="swatch" style="background:var(--green);"></div>Hoàn thành</span>
-      <span><div class="swatch" style="background:var(--red);"></div>Quá hạn</span>
+    <div class="add-task-panel" id="addRiskPanel">
+      <div class="control-card" style="margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1.2fr 1.2fr auto;gap:10px;align-items:end;">
+          <div><label>Rủi ro</label><input type="text" id="newRiskName" placeholder="VD: Thang máy tòa nhà bảo trì đúng đêm thi công" maxlength="160"></div>
+          <div><label>Biện pháp dự phòng</label><input type="text" id="newRiskFix" placeholder="VD: Xin lịch vận chuyển trước, chuẩn bị tời tay" maxlength="160"></div>
+          <button class="reset-btn" id="addRiskSubmitBtn" style="height:36px;">Thêm vào danh sách</button>
+        </div>
+      </div>
     </div>
+    <div class="risk-list" id="riskList"></div>
   </section>
 
-  <section>
-    <div class="sec-title">Settings</div>
-    <div class="controls-row">
-      <div class="control-card">
-        <label>Ngày bắt đầu</label>
-        <input type="date" id="startDate">
-      </div>
-      <div class="control-card">
-        <label>Deadline</label>
-        <input type="date" id="deadlineInput">
-      </div>
-      <div class="control-card">
-        <label>Crew tối đa (người)</label>
-        <input type="number" id="crewCapacityInput" value="8" min="1">
-      </div>
-    </div>
-  </section>
-
-  <footer>Đồng bộ thời gian thực · Đa dự án · Ghi nhớ thói quen checklist</footer>
+  <footer>Đồng bộ thời gian thực · Đa dự án · Ghi nhớ thói quen checklist theo loại công việc</footer>
 </div>
 
 <script>
-// Simple state management
-let state = {
-  tasks: [],
-  startDate: null,
-  deadline: null,
-  crewCapacity: 8,
-  taskStatus: {}
-};
-
+/* ================= HẰNG SỐ & MẪU ================= */
+const PROJECTS_KEY = 'ttta:projects-v1';
+const HABITS_KEY = 'ttta:habits-v1';
+const LEGACY_KEY = 'ttta-thicong:state-v3';
+const ACTIVE_KEY = 'ttta:active-project';
+const projKey = id => 'ttta:project:' + id;
+const attKey = (pid, wpid) => 'ttta:att:' + pid + ':' + wpid;
+const MIN_WP_HOURS = 0.25;
 const CATEGORIES = ['Chưa phân loại','Che chắn / An toàn','Tháo dỡ','Vệ sinh','MEP / Điện nước','Hoàn thiện xây dựng','Nội thất','Sàn / Thảm','Thiết bị','Nghiệm thu / Bàn giao','Mua sắm vật tư','Khác'];
 
-// Storage
-function saveState() {
-  localStorage.setItem('planning-ttt-state', JSON.stringify(state));
-}
+const RISKS_THICONG = [
+  {risk:'Sai kích thước nội thất', fix:'Đo kiểm trước gia công'},
+  {risk:'Thiếu vật tư', fix:'Dự phòng 10-20%'},
+  {risk:'Làm việc quá sức, mất tập trung', fix:'Bố trí xoay ca và nghỉ luân phiên'},
+  {risk:'Bụi thạch cao phát tán', fix:'Quây kín 100%, máy hút bụi'},
+  {risk:'Tai nạn lao động ban đêm', fix:'Giám sát ATLĐ'},
+  {risk:'Phát sinh thay đổi thiết kế', fix:'Buffer 4 giờ'}
+];
 
-function loadState() {
-  const saved = localStorage.getItem('planning-ttt-state');
-  if (saved) state = JSON.parse(saved);
-}
+/* Thư viện template mẫu — chọn khi tạo dự án mới */
+const TEMPLATES = {
+  'ttta-thucte': {
+    name:'Kế hoạch thi công TTTA (bản thực tế 12 giai đoạn)',
+    crewCapacity:5,
+    baseTasks:[
+      {code:'Che Chắn', durationH:0.5, baseCrew:2, task:'Quây kín khu vực, che chắn, tạo buồng đệm', deliverable:'Khu vực kín 100%', crewLabel:'2 phụ + 1 giám sát', cat:'Che chắn / An toàn'},
+      {code:'Tháo Trần', durationH:1.5, baseCrew:4, task:'Tháo bỏ trần sai, thu gom xà bần', deliverable:'Trần hoàn trả hiện trạng', crewLabel:'2 thợ + 2 phụ', cat:'Tháo dỡ'},
+      {code:'Vệ Sinh Hút Bụi', durationH:0.5, baseCrew:2, task:'Hút bụi, vệ sinh lần 1', deliverable:'Mặt bằng sạch', crewLabel:'1 vệ sinh + 1 phụ', cat:'Vệ sinh'},
+      {code:'Thi Công MEP', durationH:2.0, baseCrew:2, task:'Thi công điện, data, cấp nước', deliverable:'MEP hoàn thiện thô', crewLabel:'2 điện + 1 data + 1 nước', cat:'MEP / Điện nước', par:true},
+      {code:'Bả Trét Hoàn Thiện', durationH:2.0, baseCrew:2, task:'Bả trét, vá sơn, hoàn thiện xây dựng', deliverable:'Hoàn thiện xây dựng', crewLabel:'2 hoàn thiện', cat:'Hoàn thiện xây dựng', par:true, gapAfter:60},
+      {code:'Thay Thảm Sàn', durationH:2.0, baseCrew:2, task:'Di chuyển tủ dưới, xử lý sàn & thay thảm', deliverable:'Hoàn thiện sàn', crewLabel:'2 người thợ thảm', cat:'Sàn / Thảm'},
+      {code:'Lắp Đặt KLV', durationH:2.0, baseCrew:4, task:'Lắp đặt bàn làm việc, tủ treo', deliverable:'Nội thất hoàn thiện', crewLabel:'3 mộc + 1 đá + 2 phụ', cat:'Nội thất', gapAfter:570},
+      {code:'Lắp Đặt PT', durationH:1.5, baseCrew:4, task:'Lắp đặt nội thất khu vực Pantry', deliverable:'Pantry hoàn thiện', crewLabel:'4 người', cat:'Nội thất'},
+      {code:'Đấu nối thiết bị', durationH:1.5, baseCrew:3, task:'Lắp thiết bị điện, data, máy in', deliverable:'Hệ thống vận hành', crewLabel:'2 điện + 1 mộc', cat:'Thiết bị'},
+      {code:'Vệ Sinh Dọn Dẹp', durationH:1.5, baseCrew:5, task:'Punchlist, vệ sinh công nghiệp', deliverable:'Hoàn thiện 95%', crewLabel:'Toàn bộ đội', cat:'Vệ sinh'},
+      {code:'Xử Lý Phát Sinh', durationH:1.5, baseCrew:2, task:'Xử lý phát sinh', deliverable:'Dự phòng', crewLabel:'Đội standby', cat:'Khác', par:true},
+      {code:'Test Thiết Bị', durationH:0.5, baseCrew:1, task:'Chạy thử, nghiệm thu, bàn giao', deliverable:'Bàn giao hoàn chỉnh', crewLabel:'PM + CĐT', cat:'Nghiệm thu / Bàn giao', par:true}
+    ],
+    risks: RISKS_THICONG
+  },
+  'thi-cong-26g': {
+    name:'Kế hoạch thi công cải tạo VP (mẫu chuẩn 26g)',
+    crewCapacity:23,
+    baseTasks:[
+      {code:'WP-01', durationH:0.5, baseCrew:3,  task:'Quây kín khu vực, che chắn, tạo buồng đệm', deliverable:'Khu vực kín 100%', crewLabel:'2 phụ + 1 giám sát', cat:'Che chắn / An toàn'},
+      {code:'WP-02', durationH:1.5, baseCrew:4,  task:'Tháo bỏ trần sai, thu gom xà bần', deliverable:'Trần hoàn trả hiện trạng', crewLabel:'2 thợ + 2 phụ', cat:'Tháo dỡ'},
+      {code:'WP-03', durationH:0.5, baseCrew:2,  task:'Hút bụi, vệ sinh lần 1', deliverable:'Mặt bằng sạch', crewLabel:'1 vệ sinh + 1 phụ', cat:'Vệ sinh'},
+      {code:'WP-04', durationH:3.0, baseCrew:4,  task:'Thi công điện, data, cấp nước', deliverable:'MEP hoàn thiện thô', crewLabel:'2 điện + 1 data + 1 nước', cat:'MEP / Điện nước'},
+      {code:'WP-05', durationH:2.0, baseCrew:2,  task:'Bả trét, vá sơn, hoàn thiện xây dựng', deliverable:'Hoàn thiện xây dựng', crewLabel:'2 hoàn thiện', cat:'Hoàn thiện xây dựng'},
+      {code:'WP-06', durationH:5.0, baseCrew:6,  task:'Lắp đặt nội thất, pantry, đá granite', deliverable:'Nội thất hoàn thiện', crewLabel:'3 mộc + 1 đá + 2 phụ', cat:'Nội thất'},
+      {code:'WP-07', durationH:2.0, baseCrew:2,  task:'Thay thảm, lắp len chân tường', deliverable:'Hoàn thiện sàn', crewLabel:'2 thợ thảm', cat:'Sàn / Thảm'},
+      {code:'WP-08', durationH:2.5, baseCrew:3,  task:'Lắp thiết bị điện, data, máy in', deliverable:'Hệ thống vận hành', crewLabel:'2 điện + 1 mộc', cat:'Thiết bị'},
+      {code:'WP-09', durationH:3.0, baseCrew:23, task:'Punchlist, vệ sinh công nghiệp', deliverable:'Hoàn thiện 95%', crewLabel:'Toàn bộ đội', cat:'Vệ sinh'},
+      {code:'WP-10', durationH:4.0, baseCrew:2,  task:'Buffer xử lý phát sinh', deliverable:'Dự phòng', crewLabel:'Đội standby', cat:'Khác'},
+      {code:'WP-11', durationH:2.0, baseCrew:3,  task:'Chạy thử, nghiệm thu, bàn giao', deliverable:'Bàn giao hoàn chỉnh', crewLabel:'PM + CĐT', cat:'Nghiệm thu / Bàn giao'}
+    ],
+    risks: RISKS_THICONG
+  },
+  'tracking': {
+    name:'Kế hoạch triển khai tracking dự án',
+    crewCapacity:5,
+    baseTasks:[
+      {code:'TR-01', durationH:1, baseCrew:2, task:'Kickoff: thống nhất phạm vi, phân công đầu mối cập nhật', deliverable:'Biên bản kickoff + danh sách đầu mối', crewLabel:'PM + đầu mối', cat:'Khác'},
+      {code:'TR-02', durationH:2, baseCrew:1, task:'Thiết lập dashboard tracking (giai đoạn, nhân sự, deadline)', deliverable:'Dashboard sẵn sàng, link chia sẻ', crewLabel:'PM', cat:'Khác'},
+      {code:'TR-03', durationH:2, baseCrew:2, task:'Nhập kế hoạch chi tiết & định biên từng giai đoạn', deliverable:'Kế hoạch đầy đủ trên dashboard', crewLabel:'PM + kỹ thuật', cat:'Khác'},
+      {code:'TR-04', durationH:1, baseCrew:3, task:'Hướng dẫn đội hiện trường cách cập nhật trạng thái', deliverable:'Đội biết thao tác, đã test thử', crewLabel:'Toàn đội chủ chốt', cat:'Khác'},
+      {code:'TR-05', durationH:4, baseCrew:1, task:'Vận hành cập nhật hằng ngày trong giai đoạn thi công', deliverable:'Dữ liệu tiến độ luôn mới', crewLabel:'Đầu mối trực', cat:'Khác'},
+      {code:'TR-06', durationH:1, baseCrew:2, task:'Họp review giữa kỳ, xử lý lệch tiến độ', deliverable:'Danh sách hành động điều chỉnh', crewLabel:'PM + giám sát', cat:'Khác'},
+      {code:'TR-07', durationH:1, baseCrew:1, task:'Tổng kết, xuất báo cáo PDF & lưu hồ sơ', deliverable:'Báo cáo hoàn công tracking', crewLabel:'PM', cat:'Nghiệm thu / Bàn giao'}
+    ],
+    risks:[
+      {risk:'Đội hiện trường quên cập nhật trạng thái', fix:'Chỉ định đầu mối trực + nhắc mỗi ca'},
+      {risk:'Số liệu kế hoạch nhập sai', fix:'PM đối chiếu chéo trước khi vận hành'},
+      {risk:'Mất kết nối / thiết bị hiện trường', fix:'Chuẩn bị thiết bị dự phòng, cập nhật bù cuối ca'}
+    ]
+  },
+  'mau-vat-lieu': {
+    name:'Xin mẫu / layout vật liệu',
+    crewCapacity:3,
+    baseTasks:[
+      {code:'VL-01', durationH:1, baseCrew:1, task:'Lập danh sách vật liệu & hạng mục cần duyệt mẫu', deliverable:'Danh sách vật liệu đầy đủ', crewLabel:'QS/PM', cat:'Mua sắm vật tư'},
+      {code:'VL-02', durationH:2, baseCrew:1, task:'Liên hệ nhà cung cấp, yêu cầu gửi mẫu & catalogue', deliverable:'Xác nhận NCC gửi mẫu', crewLabel:'Thu mua', cat:'Mua sắm vật tư'},
+      {code:'VL-03', durationH:1, baseCrew:2, task:'Nhận mẫu, kiểm tra quy cách so với spec', deliverable:'Mẫu đạt quy cách', crewLabel:'QS + kỹ thuật', cat:'Mua sắm vật tư'},
+      {code:'VL-04', durationH:1, baseCrew:2, task:'Trình mẫu + layout vật liệu cho CĐT/Thiết kế duyệt', deliverable:'Biên bản trình mẫu', crewLabel:'PM + thiết kế', cat:'Mua sắm vật tư'},
+      {code:'VL-05', durationH:1, baseCrew:1, task:'Chỉnh sửa theo feedback, trình lại nếu cần', deliverable:'Mẫu được duyệt chính thức', crewLabel:'PM', cat:'Mua sắm vật tư'},
+      {code:'VL-06', durationH:0.5, baseCrew:1, task:'Chốt mẫu, đặt hàng theo tiến độ thi công', deliverable:'Đơn hàng xác nhận', crewLabel:'Thu mua', cat:'Mua sắm vật tư'},
+      {code:'VL-07', durationH:0.5, baseCrew:1, task:'Lưu hồ sơ mẫu đã duyệt (ảnh, biên bản) vào dashboard', deliverable:'Hồ sơ mẫu đầy đủ', crewLabel:'QS', cat:'Mua sắm vật tư'}
+    ],
+    risks:[
+      {risk:'NCC gửi mẫu chậm làm trễ tiến độ', fix:'Yêu cầu song song 2-3 NCC, chốt deadline gửi mẫu'},
+      {risk:'Mẫu duyệt khác mẫu giao thực tế', fix:'Niêm phong mẫu chuẩn, đối chiếu khi nhận hàng'},
+      {risk:'CĐT duyệt chậm', fix:'Gửi trước layout online, hẹn lịch duyệt cố định'}
+    ]
+  },
+  'empty': { name:'Dự án trống (tự thêm việc)', crewCapacity:23, baseTasks:[], risks:[] }
+};
 
-// Helper functions
-function generateId() {
-  return 'task-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-}
-
-function formatDate(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('vi-VN');
-}
-
-function formatDuration(h) {
-  if (h < 1) return h.toFixed(2) + 'h';
-  const days = Math.floor(h / 8);
-  const hrs = h % 8;
-  return (days > 0 ? days + 'd' : '') + (hrs > 0 ? hrs.toFixed(1) + 'h' : '');
-}
-
-// Add task
-document.getElementById('addTaskSubmitBtn').addEventListener('click', () => {
-  const name = document.getElementById('newTaskName').value.trim();
-  const del = document.getElementById('newTaskDel').value.trim();
-  const crew = parseInt(document.getElementById('newTaskCrew').value) || 1;
-  const hours = parseFloat(document.getElementById('newTaskHours').value) || 4;
-  const cat = document.getElementById('newTaskCat').value;
-
-  if (!name) {
-    alert('Nhập tên công việc');
-    return;
+let customTemplates = [];
+const CUSTOM_TPL_KEY = 'ttta:custom-templates-v1';
+function getTemplate(key){
+  if(key && key.indexOf('custom:')===0){
+    const t = customTemplates.find(c=>c.id===key.slice(7));
+    if(t) return t;
   }
+  return TEMPLATES[key] || TEMPLATES['empty'];
+}
 
-  state.tasks.push({
-    id: generateId(),
-    name,
-    deliverable: del,
-    crew,
-    durationH: hours,
-    category: cat
+/* ================= TRẠNG THÁI ================= */
+let projectsIndex = { projects: [] };
+let activeProjectId = null;
+let state = null;
+let habits = {};
+let attachCache = {}; // wpId -> array
+let plannedFinishMs = null;
+let draggedId = null;
+let editingId = null;
+let expandedId = null;
+let loading = true;
+
+function defaultState(templateKey, name){
+  const t = (typeof templateKey === 'object' && templateKey) ? templateKey : getTemplate(templateKey);
+  const src = Array.isArray(t.baseTasks) ? t.baseTasks : [];
+  const baseTasks = src.map((raw,i)=>{
+    const w = JSON.parse(JSON.stringify(raw));
+    w.id = 'WP-' + String(i+1).padStart(2,'0');
+    return w;
   });
-
-  document.getElementById('newTaskName').value = '';
-  document.getElementById('newTaskDel').value = '';
-  document.getElementById('newTaskCrew').value = '1';
-  document.getElementById('newTaskHours').value = '4';
-
-  saveState();
-  render();
-});
-
-// Render
-function render() {
-  const wpList = document.getElementById('wpList');
-  wpList.innerHTML = '';
-
-  state.tasks.forEach(task => {
-    const status = state.taskStatus[task.id] || 'todo';
-    const card = document.createElement('div');
-    card.className = 'wp-card status-' + status;
-    card.innerHTML = `
-      <div class="wp-top">
-        <div class="wp-code">${task.name}</div>
-        <div class="wp-badge">${status === 'done' ? 'Xong' : status === 'doing' ? 'Đang làm' : 'Chưa làm'}</div>
-      </div>
-      <div class="wp-task">${task.deliverable || 'N/A'}</div>
-      <div class="wp-meta">
-        <span><b>Crew:</b> ${task.crew} người</span>
-        <span><b>Duration:</b> ${formatDuration(task.durationH)}</span>
-        <span><b>Category:</b> ${task.category}</span>
-      </div>
-      <div class="wp-bottom">
-        <div class="wp-controls">
-          <button class="wp-btn ${status === 'todo' ? 'active-todo' : ''}" onclick="setTaskStatus('${task.id}', 'todo')">Chưa làm</button>
-          <button class="wp-btn ${status === 'doing' ? 'active-doing' : ''}" onclick="setTaskStatus('${task.id}', 'doing')">Đang làm</button>
-          <button class="wp-btn ${status === 'done' ? 'active-done' : ''}" onclick="setTaskStatus('${task.id}', 'done')">Xong</button>
-        </div>
-        <button class="detail-btn" onclick="deleteTask('${task.id}')">Xóa</button>
-      </div>
-    `;
-    wpList.appendChild(card);
+  const gaps = {}, parallel = {};
+  baseTasks.forEach(w=>{
+    if(w.gapAfter) gaps[w.id] = Number(w.gapAfter)||0;
+    if(w.par) parallel[w.id] = true;
+    delete w.gapAfter; delete w.par;
   });
-
-  renderStats();
-  renderGantt();
-  updateClocks();
+  return {
+    name: name || 'Dự án mới',
+    baseTasks,
+    risks: JSON.parse(JSON.stringify(t.risks||[])),
+    risksBaseline: JSON.parse(JSON.stringify(t.risks||[])),
+    baselineH: baseTasks.reduce((s,w)=>s+w.durationH,0),
+    startDate:null, deadline:null,
+    wpStatus:{}, riskApplied:{}, crewOverride:{}, gaps, globalGap:0,
+    order:null, customTasks:[], taskEdits:{}, crewCapacity: t.crewCapacity || 23,
+    removedTasks:[], parallel,
+    wpNotes:{}, wpTodos:{}, wpCategory:{}
+  };
 }
-
-function setTaskStatus(id, status) {
-  state.taskStatus[id] = status;
-  saveState();
-  render();
-}
-
-function deleteTask(id) {
-  state.tasks = state.tasks.filter(t => t.id !== id);
-  delete state.taskStatus[id];
-  saveState();
-  render();
-}
-
-function renderStats() {
-  const total = state.tasks.length;
-  const done = Object.values(state.taskStatus).filter(s => s === 'done').length;
-  const doing = Object.values(state.taskStatus).filter(s => s === 'doing').length;
-  const todo = total - done - doing;
-
-  const html = `
-    <div class="stat-card"><div class="stat-label">Tổng</div><div class="stat-value">${total}</div></div>
-    <div class="stat-card"><div class="stat-label">Chưa làm</div><div class="stat-value" style="color:var(--ink-dim);">${todo}</div></div>
-    <div class="stat-card"><div class="stat-label">Đang làm</div><div class="stat-value" style="color:var(--amber);">${doing}</div></div>
-    <div class="stat-card"><div class="stat-label">Hoàn thành</div><div class="stat-value" style="color:var(--green);">${done}</div></div>
-    <div class="stat-card"><div class="stat-label">% Hoàn thành</div><div class="stat-value">${total > 0 ? ((done/total)*100).toFixed(0) : 0}%</div></div>
-    <div class="stat-card"><div class="stat-label">Tổng giờ</div><div class="stat-value">${state.tasks.reduce((s, t) => s + t.durationH, 0).toFixed(1)}h</div></div>
-  `;
-  document.getElementById('statsBox').innerHTML = html;
-}
-
-function renderGantt() {
-  const ganttBox = document.getElementById('ganttBox');
-  ganttBox.innerHTML = '';
-
-  if (!state.startDate) {
-    ganttBox.innerHTML = '<p style="color:var(--ink-dim);font-size:.8rem;">Đặt ngày bắt đầu để xem Gantt</p>';
-    return;
+function normalizeState(s){
+  const d = defaultState('empty','');
+  const out = Object.assign(d, s);
+  ['wpStatus','riskApplied','crewOverride','gaps','taskEdits','parallel','wpNotes','wpTodos','wpCategory'].forEach(k=>{ if(!out[k]) out[k]={}; });
+  ['customTasks','removedTasks','baseTasks','risks'].forEach(k=>{ if(!Array.isArray(out[k])) out[k]=[]; });
+  // Migrate riskApplied (theo index cũ) → thuộc tính applied trên từng risk
+  if(out.riskApplied && Object.keys(out.riskApplied).length){
+    out.risks.forEach((r,i)=>{ if(out.riskApplied[i]) r.applied = true; });
+    out.riskApplied = {};
   }
+  // Baseline để nút "khôi phục mặc định" của Risk Register
+  if(!Array.isArray(out.risksBaseline)) out.risksBaseline = JSON.parse(JSON.stringify(out.risks.map(r=>({risk:r.risk, fix:r.fix}))));
+  return out;
+}
 
-  const start = new Date(state.startDate);
-  let current = new Date(start);
-  let offset = 0;
+/* ================= STORAGE =================
+   Adapter 2 môi trường:
+   - Claude artifact  : window.storage (shared:true → đồng bộ nhiều người xem)
+   - GitHub Pages     : localStorage (dữ liệu lưu riêng trên trình duyệt mỗi người,
+                        các tab cùng trình duyệt vẫn đồng bộ qua pollForUpdates)
+   Giữ nguyên signature (key, val, shared) — toàn bộ code phía trên không cần sửa. */
+const HAS_CLAUDE_STORAGE = !!((typeof window !== 'undefined') && window.storage && typeof window.storage.get === 'function');
+const LS_PREFIX = 'ttta-dash:';
 
-  state.tasks.forEach(task => {
-    const status = state.taskStatus[task.id] || 'todo';
-    const taskStart = current;
-    const taskEnd = new Date(taskStart.getTime() + task.durationH * 3600000);
-    current = taskEnd;
+async function sGet(key, shared){
+  if(HAS_CLAUDE_STORAGE){
+    try{ const r = await window.storage.get(key, shared); return r && r.value ? r.value : null; }catch(e){ return null; }
+  }
+  try{ return localStorage.getItem(LS_PREFIX + key); }catch(e){ return null; }
+}
+async function sSet(key, val, shared){
+  if(HAS_CLAUDE_STORAGE){ try{ await window.storage.set(key, val, shared); }catch(e){} return; }
+  try{ localStorage.setItem(LS_PREFIX + key, val); }catch(e){}
+}
+async function sDel(key, shared){
+  if(HAS_CLAUDE_STORAGE){ try{ await window.storage.delete(key, shared); }catch(e){} return; }
+  try{ localStorage.removeItem(LS_PREFIX + key); }catch(e){}
+}
 
-    const percentStart = (taskStart - start) / (1000 * 3600 * 24) / 30 * 100;
-    const percentWidth = task.durationH / (24 * 30) * 100;
+async function saveProjectsIndex(){ await sSet(PROJECTS_KEY, JSON.stringify(projectsIndex), true); }
+async function saveState(){ if(activeProjectId && state) await sSet(projKey(activeProjectId), JSON.stringify(state), true); }
+async function saveHabits(){ await sSet(HABITS_KEY, JSON.stringify(habits), true); }
 
+async function migrateLegacyIfNeeded(){
+  const legacyStr = await sGet(LEGACY_KEY, true);
+  const st = defaultState('thi-cong-26g', 'TTTA Office Renovation');
+  if(legacyStr){
+    try{
+      const legacy = JSON.parse(legacyStr);
+      ['startDate','deadline','wpStatus','riskApplied','crewOverride','gaps','globalGap','order','customTasks','taskEdits','crewCapacity','removedTasks','parallel'].forEach(k=>{
+        if(legacy[k] !== undefined && legacy[k] !== null) st[k] = legacy[k];
+      });
+    }catch(e){}
+  }
+  return st;
+}
+
+async function initProjects(){
+  const idxStr = await sGet(PROJECTS_KEY, true);
+  if(idxStr){ try{ projectsIndex = JSON.parse(idxStr); }catch(e){ projectsIndex = {projects:[]}; } }
+  if(!projectsIndex.projects || !projectsIndex.projects.length){
+    // Lần đầu: tạo dự án TTTA và kế thừa dữ liệu cũ nếu có
+    const id = 'p' + Date.now();
+    const st = await migrateLegacyIfNeeded();
+    projectsIndex = { projects: [{id, name: st.name, createdAt: Date.now()}] };
+    await sSet(projKey(id), JSON.stringify(st), true);
+    await saveProjectsIndex();
+  }
+  const savedActive = await sGet(ACTIVE_KEY, false);
+  activeProjectId = (savedActive && projectsIndex.projects.some(p=>p.id===savedActive)) ? savedActive : projectsIndex.projects[0].id;
+  const hStr = await sGet(HABITS_KEY, true);
+  if(hStr){ try{ habits = JSON.parse(hStr); }catch(e){ habits = {}; } }
+  const ctStr = await sGet(CUSTOM_TPL_KEY, true);
+  if(ctStr){ try{ customTemplates = JSON.parse(ctStr); }catch(e){ customTemplates = []; } }
+  renderTemplateOptions();
+  await loadActiveProject();
+}
+
+function renderTemplateOptions(){
+  const sel = document.getElementById('newProjTemplate');
+  sel.innerHTML = '';
+  Object.keys(TEMPLATES).forEach(k=>{
+    const o = document.createElement('option');
+    o.value = k; o.textContent = '📐 ' + TEMPLATES[k].name;
+    sel.appendChild(o);
+  });
+  customTemplates.forEach(t=>{
+    const o = document.createElement('option');
+    o.value = 'custom:' + t.id; o.textContent = '⭐ ' + t.name + ' (template riêng)';
+    sel.appendChild(o);
+  });
+}
+
+async function saveCurrentAsTemplate(){
+  const name = prompt('Tên template (VD: Kế hoạch thi công VP kiểu TTTA):', state.name + ' — template');
+  if(!name || !name.trim()) return;
+  const list = orderedWPs();
+  const baseTasks = list.map((wp,i)=>{
+    const t = {
+      code: displayCode(wp), task: wp.task, deliverable: wp.deliverable,
+      crewLabel: wp.crewLabel, baseCrew: getCrew(wp), durationH: wp.durationH,
+      cat: getCategory(wp)
+    };
+    const g = state.gaps[wp.id];
+    if(g !== undefined && g !== null && g !== '' && Number(g) > 0) t.gapAfter = Number(g);
+    if(i > 0 && isParallel(wp)) t.par = true;
+    return t;
+  });
+  customTemplates.push({
+    id: 't' + Date.now(),
+    name: name.trim(),
+    crewCapacity: state.crewCapacity || 23,
+    baseTasks,
+    risks: JSON.parse(JSON.stringify(state.risks.map(r=>({risk:r.risk, fix:r.fix}))))
+  });
+  await sSet(CUSTOM_TPL_KEY, JSON.stringify(customTemplates), true);
+  renderTemplateOptions();
+  alert('Đã lưu template "' + name.trim() + '" — từ nay tạo dự án mới có thể chọn template này để triển khai nhanh các đầu việc tương tự.');
+}
+
+async function loadActiveProject(){
+  loading = true;
+  attachCache = {}; expandedId = null; editingId = null;
+  const str = await sGet(projKey(activeProjectId), true);
+  state = normalizeState(str ? JSON.parse(str) : defaultState('empty','Dự án'));
+  const meta = projectsIndex.projects.find(p=>p.id===activeProjectId);
+  if(meta && state.name !== meta.name) state.name = meta.name;
+  syncInputs();
+  loading = false;
+  renderAll();
+}
+
+function syncInputs(){
+  document.getElementById('startDate').value = state.startDate || '';
+  document.getElementById('deadlineInput').value = state.deadline || '';
+  document.getElementById('globalGap').value = state.globalGap || 0;
+  document.getElementById('crewCapacityInput').value = state.crewCapacity || 23;
+  document.getElementById('baselineDisplay').value = fmtDur(state.baselineH || 0) + (state.baselineH ? ' (khởi tạo)' : ' — dự án trống');
+  renderProjectSelect();
+}
+
+function renderProjectSelect(){
+  const sel = document.getElementById('projectSelect');
+  sel.innerHTML = '';
+  projectsIndex.projects.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id; opt.textContent = '📁 ' + p.name;
+    if(p.id === activeProjectId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+async function createProject(name, template){
+  const id = 'p' + Date.now();
+  const st = defaultState(template, name);
+  projectsIndex.projects.push({id, name, createdAt: Date.now()});
+  await sSet(projKey(id), JSON.stringify(st), true);
+  await saveProjectsIndex();
+  activeProjectId = id;
+  await sSet(ACTIVE_KEY, id, false);
+  await loadActiveProject();
+}
+
+async function deleteActiveProject(){
+  if(projectsIndex.projects.length <= 1){ alert('Cần giữ ít nhất 1 dự án.'); return; }
+  const meta = projectsIndex.projects.find(p=>p.id===activeProjectId);
+  if(!confirm('Xóa vĩnh viễn dự án "' + (meta?meta.name:'') + '"? Toàn bộ dữ liệu của dự án này sẽ mất với tất cả mọi người.')) return;
+  await sDel(projKey(activeProjectId), true);
+  projectsIndex.projects = projectsIndex.projects.filter(p=>p.id!==activeProjectId);
+  await saveProjectsIndex();
+  activeProjectId = projectsIndex.projects[0].id;
+  await sSet(ACTIVE_KEY, activeProjectId, false);
+  await loadActiveProject();
+}
+
+/* ================= HELPERS ================= */
+function effectiveWP(raw){ const e = state.taskEdits[raw.id]; return e ? Object.assign({}, raw, e) : raw; }
+function allWPs(){ return state.baseTasks.filter(w => !state.removedTasks.includes(w.id)).concat(state.customTasks).map(effectiveWP); }
+function defaultOrderFull(){ return state.baseTasks.map(w=>w.id).concat(state.customTasks.map(t=>t.id)); }
+function displayCode(wp){ return (wp.code && wp.code.trim()) ? wp.code.trim() : wp.id; }
+function getOrder(){
+  const ids = allWPs().map(w=>w.id);
+  if(!state.order) state.order = ids.slice();
+  state.order = state.order.filter(id => ids.includes(id));
+  ids.forEach(id => { if(!state.order.includes(id)) state.order.push(id); });
+  return state.order;
+}
+function orderedWPs(){ return getOrder().map(id => allWPs().find(w=>w.id===id)).filter(Boolean); }
+function getCrew(wp){ const v = state.crewOverride[wp.id]; return v && v>0 ? v : wp.baseCrew; }
+function getGap(wp){ const v = state.gaps[wp.id]; return (v===undefined||v===null||v==='') ? (Number(state.globalGap)||0) : Number(v); }
+function getStatus(id){ return state.wpStatus[id] || 'todo'; }
+function setStatus(id,s){ state.wpStatus[id]=s; saveState(); renderAll(); }
+function durationHours(wp){ return Math.max(wp.durationH*wp.baseCrew/getCrew(wp), MIN_WP_HOURS); }
+function getCategory(wp){ return state.wpCategory[wp.id] || wp.cat || 'Chưa phân loại'; }
+function isParallel(wp){ return !!state.parallel[wp.id]; }
+function toggleParallel(id){ state.parallel[id] = !state.parallel[id]; saveState(); renderAll(); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function computeSchedule(){
+  const list = orderedWPs();
+  const anchor = state.startDate ? new Date(state.startDate + 'T13:00:00') : new Date('2000-01-01T13:00:00');
+  let cursor = new Date(anchor), groupStart = new Date(anchor), groupEnd = new Date(anchor);
+  const sched = [];
+  list.forEach((wp,i)=>{
+    const dh = durationHours(wp);
+    const par = i>0 && isParallel(wp);
+    const start = par ? new Date(groupStart) : new Date(cursor);
+    if(!par){ groupStart = new Date(start); groupEnd = new Date(start); }
+    const end = new Date(start.getTime() + dh*3600000);
+    if(end > groupEnd) groupEnd = new Date(end);
+    sched.push({wp, start, end, durationH: dh, parallel: par});
+    const next = list[i+1];
+    if(next && !isParallel(next)) cursor = new Date(groupEnd.getTime() + getGap(wp)*60000);
+  });
+  return sched;
+}
+function fmtDT(d, useDate){
+  if(useDate) return d.toLocaleString('vi-VN',{weekday:'short',hour:'2-digit',minute:'2-digit'});
+  const ref = new Date('2000-01-01T13:00:00');
+  const m = Math.round((d-ref)/60000);
+  const h = Math.floor(m/60), mm = m%60, sign = m<0?'-':'+';
+  return 'T'+sign+String(Math.abs(h)).padStart(2,'0')+':'+String(Math.abs(mm)).padStart(2,'0');
+}
+function fmtDur(h){
+  const t = Math.round(h*60), hh = Math.floor(t/60), mm = t%60;
+  return hh>0 ? hh+'g'+String(mm).padStart(2,'0') : mm+'p';
+}
+function computeOverdue(it){ if(!state.startDate) return false; if(getStatus(it.wp.id)==='done') return false; return new Date() > it.end; }
+function computeActive(it){ if(!state.startDate) return false; const n = new Date(); return n>=it.start && n<=it.end && getStatus(it.wp.id)!=='done'; }
+
+/* ================= ĐÍNH KÈM ================= */
+async function loadAttachments(wpId){
+  if(attachCache[wpId]) return attachCache[wpId];
+  const str = await sGet(attKey(activeProjectId, wpId), true);
+  attachCache[wpId] = str ? JSON.parse(str) : [];
+  return attachCache[wpId];
+}
+async function saveAttachments(wpId){
+  await sSet(attKey(activeProjectId, wpId), JSON.stringify(attachCache[wpId]||[]), true);
+}
+async function addFiles(wpId, files){
+  const list = await loadAttachments(wpId);
+  for(const f of files){
+    if(f.size > 3*1024*1024){ alert('"'+f.name+'" quá 3MB — vui lòng nén ảnh hoặc dùng link cho video/file lớn.'); continue; }
+    const totalNow = list.reduce((s,a)=>s+(a.dataUrl?a.dataUrl.length:0),0);
+    if(totalNow > 4*1024*1024){ alert('Tổng dung lượng đính kèm của công việc này đã gần giới hạn (4MB). Hãy xóa bớt trước khi thêm.'); break; }
+    const dataUrl = await new Promise((res,rej)=>{ const r = new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
+    list.push({ id:'a'+Date.now()+Math.random().toString(36).slice(2,6), name:f.name, type:f.type, dataUrl, ts:Date.now() });
+  }
+  attachCache[wpId] = list;
+  await saveAttachments(wpId);
+  renderAll();
+}
+async function deleteAttachment(wpId, attId){
+  const list = await loadAttachments(wpId);
+  attachCache[wpId] = list.filter(a=>a.id!==attId);
+  await saveAttachments(wpId);
+  renderAll();
+}
+
+/* ================= TASK CRUD ================= */
+function addCustomTask(task, deliverable, crew, durationH){
+  const id = 'CUSTOM-' + Date.now();
+  const seq = state.customTasks.length + 1;
+  state.customTasks.push({ id, code:'PS-'+String(seq).padStart(2,'0'), task, deliverable: deliverable||'Chưa xác định', crewLabel: crew+' người (phát sinh)', baseCrew: crew, durationH, custom:true });
+  getOrder(); saveState(); renderAll();
+}
+function deleteAnyTask(wp){
+  if(wp.custom){
+    state.customTasks = state.customTasks.filter(t=>t.id!==wp.id);
+    if(state.order) state.order = state.order.filter(x=>x!==wp.id);
+    delete state.wpStatus[wp.id]; delete state.crewOverride[wp.id]; delete state.gaps[wp.id];
+  } else {
+    if(!state.removedTasks.includes(wp.id)) state.removedTasks.push(wp.id);
+    if(state.order) state.order = state.order.filter(x=>x!==wp.id);
+  }
+  saveState(); renderAll();
+}
+function restoreDefaultTask(id){ state.removedTasks = state.removedTasks.filter(x=>x!==id); getOrder(); saveState(); renderAll(); }
+
+/* ================= RENDER ================= */
+function renderHeader(sched){
+  const all = allWPs();
+  document.getElementById('projTitle').innerHTML = 'Thi Công <span>' + esc(state.name) + '</span>';
+  if(!sched.length){ document.getElementById('hsub').textContent = 'Chưa có công việc — bấm "+ Thêm công việc" để bắt đầu'; return; }
+  const leadH = (Math.max(...sched.map(it=>it.end.getTime())) - sched[0].start.getTime())/3600000;
+  const peak = all.length ? Math.max(...all.map(getCrew)) : 0;
+  document.getElementById('hsub').textContent = all.length + ' giai đoạn · kế hoạch hiện tại ' + fmtDur(leadH) + ' · nhân sự cao điểm ' + peak + '/' + (state.crewCapacity||23) + ' người';
+}
+
+function renderCrew(sched){
+  const box = document.getElementById('crewBars');
+  box.innerHTML = '';
+  const all = allWPs();
+  if(!all.length){ box.innerHTML = '<div class="crew-warn" style="color:var(--ink-dim)">Chưa có công việc nào.</div>'; return; }
+  const capacity = state.crewCapacity || 23;
+  const maxCrew = Math.max(1, ...all.map(getCrew));
+  const overItems = all.filter(wp => getCrew(wp) > capacity);
+  if(overItems.length){
+    const w = document.createElement('div'); w.className = 'crew-warn';
+    w.textContent = '⚠ ' + overItems.map(displayCode).join(', ') + ' đang cần nhiều hơn lực lượng sẵn có (' + capacity + ' người)';
+    box.appendChild(w);
+  }
+  const wrap = document.createElement('div'); wrap.className = 'crew-detail-list';
+  sched.forEach(it => {
+    const wp = it.wp, crew = getCrew(wp), over = crew > capacity;
     const row = document.createElement('div');
-    row.className = 'grow';
-    row.innerHTML = `
-      <div class="grow-label">${task.name.substring(0, 8)}</div>
-      <div class="grow-track">
-        <div class="grow-bar ${status}" style="left:${percentStart}%;width:${percentWidth}%;"></div>
-      </div>
-      <div class="grow-dur">${formatDuration(task.durationH)}</div>
-    `;
-    ganttBox.appendChild(row);
+    row.className = 'crew-detail-row status-' + getStatus(wp.id);
+    row.innerHTML = '<div class="crew-detail-id">'+esc(displayCode(wp))+(wp.custom?' <span class="mini-badge">PS</span>':'')+'</div>'+
+      '<div class="crew-detail-task">'+esc(wp.task)+'</div>'+
+      '<div class="crew-track"><div class="crew-fill '+(over?'over':'')+'" style="width:'+(crew/maxCrew*100).toFixed(0)+'%"></div></div>'+
+      '<div class="crew-num '+(over?'over-text':'')+'">'+crew+' người</div>'+
+      '<div class="crew-dur">'+fmtDur(it.durationH)+'</div>';
+    wrap.appendChild(row);
+  });
+  box.appendChild(wrap);
+}
+
+function renderGantt(sched){
+  const bar = document.getElementById('ganttBar');
+  bar.innerHTML = '';
+  if(!sched.length){ document.getElementById('ganttStart').textContent=''; document.getElementById('ganttEnd').textContent=''; return; }
+  const t0 = sched[0].start.getTime();
+  const t1 = Math.max(...sched.map(it=>it.end.getTime()));
+  const total = Math.max(1, t1-t0);
+  sched.forEach(it => {
+    const overdue = computeOverdue(it), active = computeActive(it);
+    let st = getStatus(it.wp.id);
+    if(active && st==='todo') st = 'doing';
+    const cls = overdue ? 'overdue' : st;
+    const row = document.createElement('div');
+    row.className = 'grow' + (it.parallel?' grow-parallel':'');
+    row.title = 'Bấm để nhảy đến chi tiết ' + displayCode(it.wp);
+    const left = (it.start.getTime()-t0)/total*100;
+    const width = Math.max(.8, (it.end.getTime()-it.start.getTime())/total*100);
+    row.innerHTML = '<div class="grow-label">'+(it.parallel?'⇉ ':'')+esc(displayCode(it.wp))+'</div>'+
+      '<div class="grow-track"><div class="grow-bar '+cls+'" style="left:'+left+'%;width:'+width+'%;"></div></div>'+
+      '<div class="grow-dur">'+fmtDur(it.durationH)+'</div>';
+    row.addEventListener('click', () => jumpToTask(it.wp.id));
+    bar.appendChild(row);
+  });
+  document.getElementById('ganttStart').textContent = fmtDT(sched[0].start, !!state.startDate);
+  document.getElementById('ganttEnd').textContent = fmtDT(new Date(t1), !!state.startDate);
+}
+
+function jumpToTask(id){
+  expandedId = id;
+  renderAll();
+  requestAnimationFrame(()=>{
+    const card = document.querySelector('.wp-card[data-id="'+id+'"]');
+    if(card){
+      card.scrollIntoView({behavior:'smooth', block:'center'});
+      card.classList.add('flash');
+      setTimeout(()=>card.classList.remove('flash'), 1700);
+    }
   });
 }
 
-function updateClocks() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2, '0');
-  const m = String(now.getMinutes()).padStart(2, '0');
-  const s = String(now.getSeconds()).padStart(2, '0');
-  const day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][now.getDay()];
-  const date = now.getDate();
-  
-  document.getElementById('clockDisplay').textContent = `${h}:${m}:${s} ${day} ${date}`;
+function buildDetailPanel(wp){
+  const cat = getCategory(wp);
+  const todos = state.wpTodos[wp.id] || [];
+  const note = state.wpNotes[wp.id] || '';
+  const habitList = habits[cat] || [];
+  const canApplyHabit = habitList.length && !todos.length;
+  const atts = attachCache[wp.id];
 
-  if (state.deadline) {
-    const dl = new Date(state.deadline);
-    const diff = dl - now;
-    if (diff > 0) {
-      const days = Math.floor(diff / (1000 * 3600 * 24));
-      const hours = Math.floor((diff % (1000 * 3600 * 24)) / (1000 * 3600));
-      document.getElementById('cdDeadline').textContent = `${days}d ${hours}h`;
-    } else {
-      document.getElementById('cdDeadline').textContent = 'QUÁHẠN';
-      document.getElementById('cdDeadline').style.color = 'var(--red)';
-    }
+  let todoHtml = todos.map((t,i)=>'<div class="todo-item '+(t.done?'done':'')+'">'+
+    '<input type="checkbox" '+(t.done?'checked':'')+' data-todo-toggle="'+i+'">'+
+    '<span>'+esc(t.text)+'</span>'+
+    '<button class="todo-del" data-todo-del="'+i+'">✕</button></div>').join('');
+  if(!todos.length) todoHtml = '<div style="font-size:.78rem;color:var(--ink-dim);">Chưa có mục nào trong checklist.</div>';
+
+  let attHtml;
+  if(atts === undefined){
+    attHtml = '<div class="att-note">Đang tải đính kèm…</div>';
+    loadAttachments(wp.id).then(()=>{ if(expandedId===wp.id) renderAll(); });
+  } else if(!atts.length){
+    attHtml = '';
+  } else {
+    attHtml = '<div class="att-grid">' + atts.map(a=>{
+      let inner;
+      if(a.type && a.type.startsWith('image/')) inner = '<img src="'+a.dataUrl+'" alt="">';
+      else if(a.type && a.type.startsWith('video/')) inner = '<video src="'+a.dataUrl+'" controls muted></video>';
+      else inner = '<a class="att-file" href="'+a.dataUrl+'" download="'+esc(a.name)+'" title="Tải xuống">📎</a>';
+      return '<div class="att-item">'+inner+'<div class="att-name" title="'+esc(a.name)+'">'+esc(a.name)+'</div><button class="att-del" data-att-del="'+a.id+'">✕</button></div>';
+    }).join('') + '</div>';
   }
 
-  if (state.startDate && state.tasks.length > 0) {
-    const totalHours = state.tasks.reduce((s, t) => s + t.durationH, 0);
-    const startD = new Date(state.startDate);
-    const plannedEnd = new Date(startD.getTime() + totalHours * 3600000);
-    document.getElementById('cdPlanned').textContent = formatDate(plannedEnd);
-  }
+  return '<div class="wp-detail" data-detail="'+wp.id+'">' +
+    '<div><h4>Loại công việc (dùng cho ghi nhớ thói quen)</h4>' +
+      '<div class="cat-row"><select data-cat="'+wp.id+'">' + CATEGORIES.map(c=>'<option '+(c===cat?'selected':'')+'>'+esc(c)+'</option>').join('') + '</select>' +
+      (habitList.length ? '<span class="habit-hint">💡 Loại này đã có thói quen: '+habitList.length+' mục checklist</span>' : '') +
+      '</div></div>' +
+    '<div><h4>Checklist công việc</h4><div class="todo-list">' + todoHtml + '</div>' +
+      '<div class="todo-add" style="margin-top:8px;"><input type="text" placeholder="Thêm mục checklist… (Enter)" data-todo-input="'+wp.id+'" maxlength="140"><button class="reset-btn" data-todo-add="'+wp.id+'">+ Thêm</button></div>' +
+      '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">' +
+        (canApplyHabit ? '<button class="reset-btn" data-habit-apply="'+wp.id+'">⚡ Áp dụng checklist quen thuộc ('+habitList.length+' mục)</button>' : '') +
+        (todos.length ? '<button class="reset-btn" data-habit-save="'+wp.id+'">💾 Lưu checklist này làm thói quen cho loại "'+esc(cat)+'"</button>' : '') +
+      '</div></div>' +
+    '<div><h4>Ghi chú</h4><textarea data-note="'+wp.id+'" placeholder="Ghi chú hiện trường, vướng mắc, quyết định…">'+esc(note)+'</textarea></div>' +
+    '<div><h4>Đính kèm (ảnh / video / file ≤3MB)</h4>' +
+      '<div class="dropzone" data-drop="'+wp.id+'">📥 Kéo thả file vào đây hoặc bấm để chọn<input type="file" multiple style="display:none" data-file-input="'+wp.id+'"></div>' +
+      attHtml +
+      '<div class="att-note">Ảnh/video lớn nên nén trước; video dài hãy dán link vào Ghi chú thay vì upload.</div>' +
+    '</div>' +
+  '</div>';
 }
 
-// Events
-document.getElementById('startDate').addEventListener('change', (e) => {
-  state.startDate = e.target.value || null;
-  saveState();
-  render();
+function renderTimeline(sched){
+  const box = document.getElementById('timeline');
+  box.innerHTML = '';
+  sched.forEach((item,i)=>{
+    const wp = item.wp;
+    const status = getStatus(wp.id);
+    const overdue = computeOverdue(item), active = computeActive(item);
+    const card = document.createElement('div');
+    card.className = 'wp-card status-' + status + (overdue?' overdue':'');
+    if(active && status==='todo') card.classList.add('status-doing');
+    card.draggable = true;
+    card.dataset.id = wp.id;
+
+    if(editingId === wp.id){
+      card.draggable = false;
+      card.innerHTML = '<div class="wp-top"><div><span class="wp-code">'+esc(displayCode(wp))+'</span> <span class="wp-badge edited-badge">Đang sửa</span></div></div>'+
+        '<div class="wp-edit-form">'+
+        '<label>Mã hiển thị</label><input type="text" id="edit-code-'+wp.id+'" value="'+esc(displayCode(wp))+'">'+
+        '<label>Tên công việc</label><input type="text" id="edit-task-'+wp.id+'" value="'+esc(wp.task)+'">'+
+        '<div class="wp-edit-row"><div><label>Deliverable</label><input type="text" id="edit-deliv-'+wp.id+'" value="'+esc(wp.deliverable)+'"></div>'+
+        '<div><label>Mô tả định biên</label><input type="text" id="edit-label-'+wp.id+'" value="'+esc(wp.crewLabel)+'"></div></div>'+
+        '<div class="wp-edit-row"><div><label>Số người định biên gốc</label><input type="number" id="edit-crew-'+wp.id+'" min="1" value="'+wp.baseCrew+'"></div>'+
+        '<div><label>Thời lượng gốc (giờ)</label><input type="number" id="edit-dur-'+wp.id+'" min="0.25" step="0.25" value="'+wp.durationH+'"></div></div>'+
+        '<div class="wp-edit-actions"><button class="reset-btn save-edit-btn" data-save="'+wp.id+'">✓ Lưu</button>'+
+        '<button class="reset-btn" data-cancel="'+wp.id+'">Hủy</button>'+
+        (state.taskEdits[wp.id] ? '<button class="reset-btn" data-revert="'+wp.id+'">↺ Về gốc</button>' : '')+
+        '</div></div>';
+      box.appendChild(card);
+      appendGapNode(box, sched, i);
+      return;
+    }
+
+    const timeLabel = fmtDT(item.start, !!state.startDate)+' → '+fmtDT(item.end, !!state.startDate)+' ('+fmtDur(item.durationH)+')';
+    let badge = '<span class="wp-badge">Chưa bắt đầu</span>';
+    if(overdue) badge = '<span class="wp-badge overdue">Trễ hẹn</span>';
+    else if(status==='doing'||(active&&status==='todo')) badge = '<span class="wp-badge doing">Đang làm</span>';
+    else if(status==='done') badge = '<span class="wp-badge done">Hoàn thành</span>';
+    const customBadge = wp.custom ? '<span class="wp-badge custom-badge">Phát sinh</span>' : '';
+    const editedBadge = (state.taskEdits[wp.id] && !wp.custom) ? '<span class="wp-badge edited-badge">Đã sửa</span>' : '';
+    const parallelBadge = item.parallel ? '<span class="wp-badge parallel-badge">⇉ Song song</span>' : '';
+    const noteCount = (state.wpTodos[wp.id]||[]).length;
+    const hasNote = (state.wpNotes[wp.id]||'').trim().length > 0;
+    const detailLabel = '📋 Chi tiết' + (noteCount||hasNote ? ' •' : '');
+    const parallelBtn = i>0 ? '<button class="par-btn '+(item.parallel?'on':'')+'" data-par="'+wp.id+'" title="Chạy song song với giai đoạn trên">⇉</button>' : '';
+    const crew = getCrew(wp);
+    const sf = crew/wp.baseCrew;
+    const speedCls = sf>1.05?'fast':(sf<0.95?'slow':'norm');
+
+    card.innerHTML = '<div class="drag-handle" draggable="true" title="Kéo để đổi thứ tự">⠿</div>'+
+      '<div class="wp-top"><div><span class="wp-code">'+esc(displayCode(wp))+'</span> &nbsp; <span class="wp-time">'+timeLabel+'</span> '+customBadge+editedBadge+parallelBadge+'</div>'+
+      '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'+badge+parallelBtn+
+      '<button class="detail-btn '+(expandedId===wp.id?'open':'')+'" data-detail-btn="'+wp.id+'">'+detailLabel+'</button>'+
+      '<button class="edit-task-btn" data-edit="'+wp.id+'">✎ Sửa</button>'+
+      '<button class="del-task-btn" data-del="'+wp.id+'">✕ Xóa</button></div></div>'+
+      '<div class="wp-task">'+esc(wp.task)+'</div>'+
+      '<div class="wp-meta"><div>Deliverable: <b>'+esc(wp.deliverable)+'</b></div><div>Định biên gốc: <b>'+esc(wp.crewLabel)+' ('+wp.baseCrew+')</b></div><div>Loại: <b>'+esc(getCategory(wp))+'</b></div></div>'+
+      '<div class="wp-bottom"><div class="wp-controls">'+
+      '<button class="wp-btn '+(status==='todo'?'active-todo':'')+'" data-id="'+wp.id+'" data-s="todo">Chưa bắt đầu</button>'+
+      '<button class="wp-btn '+(status==='doing'?'active-doing':'')+'" data-id="'+wp.id+'" data-s="doing">Đang làm</button>'+
+      '<button class="wp-btn '+(status==='done'?'active-done':'')+'" data-id="'+wp.id+'" data-s="done">Hoàn thành</button></div>'+
+      '<div class="crew-stepper"><button class="step-btn" data-crew="'+wp.id+'" data-d="-1">−</button>'+
+      '<span class="crew-val">'+crew+' người</span>'+
+      '<button class="step-btn" data-crew="'+wp.id+'" data-d="1">+</button>'+
+      '<span class="speed-tag '+speedCls+'">'+sf.toFixed(1)+'x</span></div></div>'+
+      (expandedId===wp.id ? buildDetailPanel(wp) : '');
+    box.appendChild(card);
+    appendGapNode(box, sched, i);
+  });
+
+  bindTimelineEvents(box);
+}
+
+function appendGapNode(box, sched, i){
+  if(i >= sched.length-1) return;
+  const wp = sched[i].wp;
+  const gapMin = getGap(wp);
+  const node = document.createElement('div');
+  node.className = 'gap-node' + (gapMin>0?' active':'');
+  if(sched[i+1].parallel){
+    node.classList.add('par-link');
+    node.innerHTML = '<div class="line"></div>⇉ ' + esc(displayCode(sched[i+1].wp)) + ' chạy song song với giai đoạn trên';
+  } else {
+    node.innerHTML = '<div class="line"></div>Giãn cách/nghỉ trước ' + esc(displayCode(sched[i+1].wp)) + ': <input type="number" min="0" step="5" value="'+gapMin+'" data-gap="'+wp.id+'"> phút';
+  }
+  box.appendChild(node);
+}
+
+function bindTimelineEvents(box){
+  box.querySelectorAll('.wp-btn').forEach(b=>b.addEventListener('click',()=>setStatus(b.dataset.id, b.dataset.s)));
+  box.querySelectorAll('.step-btn').forEach(b=>b.addEventListener('click',()=>{
+    const wp = allWPs().find(w=>w.id===b.dataset.crew);
+    state.crewOverride[wp.id] = Math.min(99, Math.max(1, getCrew(wp)+Number(b.dataset.d)));
+    saveState(); renderAll();
+  }));
+  box.querySelectorAll('input[data-gap]').forEach(inp=>inp.addEventListener('change',()=>{
+    state.gaps[inp.dataset.gap] = Math.max(0, Number(inp.value)||0);
+    saveState(); renderAll();
+  }));
+  box.querySelectorAll('.del-task-btn').forEach(b=>b.addEventListener('click',()=>{
+    const wp = allWPs().find(w=>w.id===b.dataset.del);
+    if(wp) deleteAnyTask(wp);
+  }));
+  box.querySelectorAll('.edit-task-btn').forEach(b=>b.addEventListener('click',()=>{ editingId=b.dataset.edit; renderAll(); }));
+  box.querySelectorAll('.par-btn').forEach(b=>b.addEventListener('click',()=>toggleParallel(b.dataset.par)));
+  box.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{ editingId=null; renderAll(); }));
+  box.querySelectorAll('[data-revert]').forEach(b=>b.addEventListener('click',()=>{ delete state.taskEdits[b.dataset.revert]; editingId=null; saveState(); renderAll(); }));
+  box.querySelectorAll('[data-save]').forEach(b=>b.addEventListener('click',()=>{
+    const id = b.dataset.save;
+    const task = document.getElementById('edit-task-'+id).value.trim();
+    if(!task){ document.getElementById('edit-task-'+id).focus(); return; }
+    const edit = {
+      task,
+      deliverable: document.getElementById('edit-deliv-'+id).value.trim() || 'Chưa xác định',
+      crewLabel: document.getElementById('edit-label-'+id).value.trim() || 'N/A',
+      baseCrew: Math.max(1, Number(document.getElementById('edit-crew-'+id).value)||1),
+      durationH: Math.max(0.25, Number(document.getElementById('edit-dur-'+id).value)||0.25)
+    };
+    const cv = document.getElementById('edit-code-'+id).value.trim();
+    if(cv) edit.code = cv;
+    state.taskEdits[id] = edit;
+    editingId = null; saveState(); renderAll();
+  }));
+  box.querySelectorAll('[data-detail-btn]').forEach(b=>b.addEventListener('click',()=>{
+    expandedId = (expandedId === b.dataset.detailBtn) ? null : b.dataset.detailBtn;
+    renderAll();
+  }));
+
+  // Detail panel events
+  box.querySelectorAll('select[data-cat]').forEach(sel=>sel.addEventListener('change',()=>{
+    state.wpCategory[sel.dataset.cat] = sel.value;
+    saveState(); renderAll();
+  }));
+  box.querySelectorAll('textarea[data-note]').forEach(ta=>{
+    ta.addEventListener('change',()=>{ state.wpNotes[ta.dataset.note] = ta.value; saveState(); });
+  });
+  const addTodo = (wpId, inputEl) => {
+    const txt = inputEl.value.trim();
+    if(!txt) return;
+    if(!state.wpTodos[wpId]) state.wpTodos[wpId] = [];
+    state.wpTodos[wpId].push({text:txt, done:false});
+    inputEl.value = '';
+    saveState(); renderAll();
+  };
+  box.querySelectorAll('input[data-todo-input]').forEach(inp=>inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addTodo(inp.dataset.todoInput, inp);} }));
+  box.querySelectorAll('[data-todo-add]').forEach(b=>b.addEventListener('click',()=>{
+    const inp = box.querySelector('input[data-todo-input="'+b.dataset.todoAdd+'"]');
+    if(inp) addTodo(b.dataset.todoAdd, inp);
+  }));
+  box.querySelectorAll('[data-todo-toggle]').forEach(cb=>cb.addEventListener('change',()=>{
+    const wpId = expandedId, idx = Number(cb.dataset.todoToggle);
+    if(state.wpTodos[wpId] && state.wpTodos[wpId][idx]){ state.wpTodos[wpId][idx].done = cb.checked; saveState(); renderAll(); }
+  }));
+  box.querySelectorAll('[data-todo-del]').forEach(b=>b.addEventListener('click',()=>{
+    const wpId = expandedId, idx = Number(b.dataset.todoDel);
+    if(state.wpTodos[wpId]){ state.wpTodos[wpId].splice(idx,1); saveState(); renderAll(); }
+  }));
+  box.querySelectorAll('[data-habit-save]').forEach(b=>b.addEventListener('click',()=>{
+    const wpId = b.dataset.habitSave;
+    const wp = allWPs().find(w=>w.id===wpId);
+    const cat = getCategory(wp);
+    habits[cat] = (state.wpTodos[wpId]||[]).map(t=>t.text);
+    saveHabits(); renderAll();
+  }));
+  box.querySelectorAll('[data-habit-apply]').forEach(b=>b.addEventListener('click',()=>{
+    const wpId = b.dataset.habitApply;
+    const wp = allWPs().find(w=>w.id===wpId);
+    const cat = getCategory(wp);
+    state.wpTodos[wpId] = (habits[cat]||[]).map(t=>({text:t, done:false}));
+    saveState(); renderAll();
+  }));
+
+  // Dropzone
+  box.querySelectorAll('.dropzone').forEach(dz=>{
+    const wpId = dz.dataset.drop;
+    const fileInput = dz.querySelector('input[type=file]');
+    dz.addEventListener('click',()=>fileInput.click());
+    fileInput.addEventListener('change',()=>{ if(fileInput.files.length) addFiles(wpId, Array.from(fileInput.files)); });
+    dz.addEventListener('dragover',e=>{ e.preventDefault(); e.stopPropagation(); dz.classList.add('dragover'); });
+    dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+    dz.addEventListener('drop',e=>{
+      e.preventDefault(); e.stopPropagation(); dz.classList.remove('dragover');
+      if(e.dataTransfer.files.length) addFiles(wpId, Array.from(e.dataTransfer.files));
+    });
+  });
+  box.querySelectorAll('[data-att-del]').forEach(b=>b.addEventListener('click',()=>deleteAttachment(expandedId, b.dataset.attDel)));
+
+  // Drag & drop reorder (skip when dragging from detail area)
+  box.querySelectorAll('.wp-card').forEach(card=>{
+    card.addEventListener('dragstart',e=>{
+      if(e.target.closest('.wp-detail')){ e.preventDefault(); return; }
+      draggedId = card.dataset.id;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend',()=>{
+      card.classList.remove('dragging');
+      box.querySelectorAll('.wp-card').forEach(c=>c.classList.remove('drag-over-top','drag-over-bottom'));
+    });
+    card.addEventListener('dragover',e=>{
+      e.preventDefault();
+      if(!draggedId || draggedId===card.dataset.id) return;
+      const r = card.getBoundingClientRect();
+      const before = (e.clientY - r.top) < r.height/2;
+      card.classList.toggle('drag-over-top', before);
+      card.classList.toggle('drag-over-bottom', !before);
+    });
+    card.addEventListener('dragleave',()=>card.classList.remove('drag-over-top','drag-over-bottom'));
+    card.addEventListener('drop',e=>{
+      e.preventDefault();
+      card.classList.remove('drag-over-top','drag-over-bottom');
+      if(!draggedId || draggedId===card.dataset.id) return;
+      const r = card.getBoundingClientRect();
+      const before = (e.clientY - r.top) < r.height/2;
+      const order = getOrder().filter(id=>id!==draggedId);
+      let idx = order.indexOf(card.dataset.id);
+      if(!before) idx += 1;
+      order.splice(idx, 0, draggedId);
+      state.order = order;
+      draggedId = null;
+      saveState(); renderAll();
+    });
+  });
+}
+
+let editingRiskIdx = null;
+function renderRisks(){
+  const box = document.getElementById('riskList');
+  box.innerHTML = '';
+  if(!state.risks.length){ box.innerHTML = '<div style="font-size:.8rem;color:var(--ink-dim);">Chưa có rủi ro nào — bấm "+ Thêm rủi ro" để bắt đầu.</div>'; return; }
+  state.risks.forEach((r,i)=>{
+    const row = document.createElement('div');
+    row.className = 'risk-row';
+    if(editingRiskIdx === i){
+      row.style.gridTemplateColumns = '28px 1fr 1fr auto';
+      row.innerHTML = '<div class="risk-num">'+String(i+1).padStart(2,'0')+'</div>'+
+        '<div><input type="text" id="edit-risk-name" value="'+esc(r.risk)+'" style="width:100%;background:var(--bg2);border:1px solid var(--panel-line);border-radius:9px;padding:7px 9px;font-size:.82rem;font-family:Inter,sans-serif;"></div>'+
+        '<div><input type="text" id="edit-risk-fix" value="'+esc(r.fix)+'" style="width:100%;background:var(--bg2);border:1px solid var(--panel-line);border-radius:9px;padding:7px 9px;font-size:.82rem;font-family:Inter,sans-serif;"></div>'+
+        '<div style="display:flex;gap:6px;"><button class="reset-btn save-edit-btn" data-risk-save="'+i+'">✓</button><button class="reset-btn" data-risk-cancel="'+i+'">Hủy</button></div>';
+    } else {
+      row.innerHTML = '<div class="risk-num">'+String(i+1).padStart(2,'0')+'</div>'+
+        '<div class="risk-name">'+esc(r.risk)+'</div>'+
+        '<div class="risk-fix">'+esc(r.fix)+'</div>'+
+        '<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap;">'+
+          '<label class="risk-toggle '+(r.applied?'applied':'')+'"><input type="checkbox" '+(r.applied?'checked':'')+' data-risk-i="'+i+'"> Đã áp dụng</label>'+
+          '<button class="edit-task-btn" data-risk-edit="'+i+'">✎</button>'+
+          '<button class="del-task-btn" data-risk-del="'+i+'">✕</button>'+
+        '</div>';
+      row.style.gridTemplateColumns = '28px 1fr 1fr auto';
+    }
+    box.appendChild(row);
+  });
+  box.querySelectorAll('input[data-risk-i]').forEach(cb=>cb.addEventListener('change',()=>{
+    state.risks[Number(cb.dataset.riskI)].applied = cb.checked;
+    saveState(); renderAll();
+  }));
+  box.querySelectorAll('[data-risk-edit]').forEach(b=>b.addEventListener('click',()=>{ editingRiskIdx = Number(b.dataset.riskEdit); renderAll(); }));
+  box.querySelectorAll('[data-risk-cancel]').forEach(b=>b.addEventListener('click',()=>{ editingRiskIdx = null; renderAll(); }));
+  box.querySelectorAll('[data-risk-save]').forEach(b=>b.addEventListener('click',()=>{
+    const i = Number(b.dataset.riskSave);
+    const name = document.getElementById('edit-risk-name').value.trim();
+    const fix = document.getElementById('edit-risk-fix').value.trim();
+    if(!name){ document.getElementById('edit-risk-name').focus(); return; }
+    state.risks[i].risk = name;
+    state.risks[i].fix = fix || '—';
+    editingRiskIdx = null;
+    saveState(); renderAll();
+  }));
+  box.querySelectorAll('[data-risk-del]').forEach(b=>b.addEventListener('click',()=>{
+    state.risks.splice(Number(b.dataset.riskDel), 1);
+    editingRiskIdx = null;
+    saveState(); renderAll();
+  }));
+}
+
+function renderStats(sched){
+  const all = allWPs();
+  const doneCount = all.filter(wp=>getStatus(wp.id)==='done').length;
+  document.getElementById('statProgress').textContent = all.length ? Math.round(doneCount/all.length*100)+'%' : '—';
+  document.getElementById('statProgressNote').textContent = doneCount+'/'+all.length+' giai đoạn xong';
+
+  const overdueList = sched.filter(computeOverdue);
+  document.getElementById('statOverdue').textContent = overdueList.length;
+
+  const activeItem = sched.find(computeActive) || sched.find(it=>getStatus(it.wp.id)==='doing');
+  const upcoming = sched.find(it=>getStatus(it.wp.id)==='todo' && !computeOverdue(it));
+  if(activeItem){
+    document.getElementById('statCurrent').textContent = displayCode(activeItem.wp);
+    document.getElementById('statCurrentNote').textContent = activeItem.wp.task;
+  } else if(!state.startDate){
+    document.getElementById('statCurrent').textContent = '—';
+    document.getElementById('statCurrentNote').textContent = 'Chưa đặt ngày bắt đầu';
+  } else if(all.length && doneCount===all.length){
+    document.getElementById('statCurrent').textContent = 'Xong';
+    document.getElementById('statCurrentNote').textContent = 'Đã bàn giao hoàn chỉnh';
+  } else {
+    document.getElementById('statCurrent').textContent = upcoming ? displayCode(upcoming.wp) : '—';
+    document.getElementById('statCurrentNote').textContent = upcoming ? 'Sắp tới: '+upcoming.wp.task : 'Ngoài khung giờ thi công';
+  }
+
+  const riskApplied = state.risks.filter(r=>r.applied).length;
+  document.getElementById('statRisk').textContent = riskApplied+'/'+state.risks.length;
+
+  let leadtimeH = 0, deltaH = 0;
+  if(sched.length){
+    leadtimeH = (Math.max(...sched.map(it=>it.end.getTime())) - sched[0].start.getTime())/3600000;
+    deltaH = leadtimeH - (state.baselineH||0);
+  }
+  document.getElementById('statLeadtime').textContent = sched.length ? fmtDur(leadtimeH) : '—';
+  const deltaEl = document.getElementById('statLeadtimeDelta');
+  if(!state.baselineH){ deltaEl.textContent = 'không có mốc gốc (dự án trống)'; deltaEl.style.color='var(--ink-dim)'; }
+  else if(Math.abs(deltaH)<0.01){ deltaEl.textContent = 'đúng bằng kế hoạch gốc ('+fmtDur(state.baselineH)+')'; deltaEl.style.color='var(--ink-dim)'; }
+  else{
+    deltaEl.textContent = (deltaH>0?'+':'−')+fmtDur(Math.abs(deltaH))+' so với gốc ('+fmtDur(state.baselineH)+')';
+    deltaEl.style.color = deltaH>0.01 ? 'var(--red)' : 'var(--green)';
+  }
+
+  const totalEffort = all.reduce((s,wp)=>s+wp.durationH*wp.baseCrew,0);
+  let ws = 1;
+  if(totalEffort>0){
+    ws = 0;
+    all.forEach(wp=>{ ws += (getCrew(wp)/wp.baseCrew)*((wp.durationH*wp.baseCrew)/totalEffort); });
+  }
+  document.getElementById('statSpeed').textContent = ws.toFixed(2)+'x';
+  document.getElementById('statSpeedNote').textContent = ws>1.05?'Đẩy nhanh hơn kế hoạch':(ws<0.95?'Chậm hơn kế hoạch':'Đúng định biên gốc');
+
+  const reminderBox = document.getElementById('reminderBox');
+  const list = document.getElementById('reminderList');
+  list.innerHTML = '';
+  const items = [];
+  overdueList.forEach(it=>items.push(displayCode(it.wp)+' đã quá giờ ('+fmtDT(it.end,!!state.startDate)+') nhưng chưa hoàn thành — '+it.wp.task));
+  if(state.startDate && activeItem && getStatus(activeItem.wp.id)==='todo') items.push(displayCode(activeItem.wp)+' đang trong khung giờ thi công, cần cập nhật trạng thái "Đang làm"');
+  if(state.baselineH && deltaH>0.01) items.push('Leadtime đang dãn thêm '+fmtDur(deltaH)+' — cân nhắc thêm người / chạy song song / bớt giãn cách');
+  if(state.deadline && state.startDate && sched.length){
+    const dlMs = new Date(state.deadline).getTime();
+    const finMs = Math.max(...sched.map(it=>it.end.getTime()));
+    if(finMs > dlMs) items.push('Lịch hiện tại dự kiến hoàn thành TRỄ hơn deadline '+fmtDur((finMs-dlMs)/3600000));
+  }
+  if(items.length){
+    items.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; list.appendChild(li); });
+    reminderBox.classList.add('show');
+  } else reminderBox.classList.remove('show');
+}
+
+function renderRemovedPanel(){
+  const removed = state.removedTasks.map(id=>state.baseTasks.find(w=>w.id===id)).filter(Boolean);
+  const btn = document.getElementById('removedToggleBtn');
+  btn.style.display = removed.length ? 'inline-block' : 'none';
+  document.getElementById('removedCount').textContent = removed.length;
+  const list = document.getElementById('removedList');
+  list.innerHTML = '';
+  removed.forEach(wp=>{
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--panel-line);gap:10px;';
+    row.innerHTML = '<div><span class="wp-code">'+esc(displayCode(effectiveWP(wp)))+'</span> &nbsp; <span style="color:var(--ink-dim);font-size:.85rem;">'+esc(effectiveWP(wp).task)+'</span></div><button class="reset-btn" data-restore="'+wp.id+'">↺ Khôi phục</button>';
+    list.appendChild(row);
+  });
+  list.querySelectorAll('[data-restore]').forEach(b=>b.addEventListener('click',()=>restoreDefaultTask(b.dataset.restore)));
+  if(!removed.length) document.getElementById('removedPanel').classList.remove('show');
+}
+
+function fmtCountdown(ms){
+  const neg = ms<0;
+  let s = Math.floor(Math.abs(ms)/1000);
+  const d = Math.floor(s/86400); s-=d*86400;
+  const h = Math.floor(s/3600); s-=h*3600;
+  const m = Math.floor(s/60); s-=m*60;
+  const parts = [];
+  if(d>0) parts.push(d+'n');
+  parts.push(String(h).padStart(2,'0')+'g', String(m).padStart(2,'0')+'p', String(s).padStart(2,'0')+'s');
+  return (neg?'-':'')+parts.join(' ');
+}
+function updateCountdowns(){
+  if(!state) return;
+  const now = Date.now();
+  const dlEl = document.getElementById('cdDeadline'), dlNote = document.getElementById('cdDeadlineNote');
+  let dlMs = null;
+  if(state.deadline){
+    dlMs = new Date(state.deadline).getTime();
+    const diff = dlMs - now;
+    dlEl.textContent = diff>=0 ? fmtCountdown(diff) : 'Quá hạn '+fmtCountdown(diff).replace('-','');
+    dlEl.className = 'cd-value'+(diff<0?' late':'');
+    dlNote.textContent = 'Deadline: '+new Date(state.deadline).toLocaleString('vi-VN',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  } else { dlEl.textContent='—'; dlEl.className='cd-value'; dlNote.textContent='Chưa đặt deadline bàn giao'; }
+
+  const plEl = document.getElementById('cdPlanned'), plNote = document.getElementById('cdPlannedNote');
+  if(state.startDate && plannedFinishMs){
+    const diff = plannedFinishMs - now;
+    plEl.textContent = diff>=0 ? fmtCountdown(diff) : 'Lố lịch '+fmtCountdown(diff).replace('-','');
+    plEl.className = 'cd-value'+(diff<0?' late':'');
+    plNote.textContent = 'Dự kiến xong: '+new Date(plannedFinishMs).toLocaleString('vi-VN',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  } else { plEl.textContent='—'; plEl.className='cd-value'; plNote.textContent='Cần đặt ngày bắt đầu để tính lịch dự kiến'; }
+
+  const deEl = document.getElementById('cdDelta'), deNote = document.getElementById('cdDeltaNote');
+  if(dlMs && state.startDate && plannedFinishMs){
+    const delta = dlMs - plannedFinishMs;
+    if(delta>=0){ deEl.textContent='Dư '+fmtDur(delta/3600000); deEl.className='cd-value ok'; deNote.textContent='Lịch hiện tại về đích trước deadline'; }
+    else{ deEl.textContent='Vượt '+fmtDur(-delta/3600000); deEl.className='cd-value late'; deNote.textContent='Lịch trễ hơn deadline — thêm người / song song / bớt nghỉ'; }
+  } else { deEl.textContent='—'; deEl.className='cd-value'; deNote.textContent='Cần cả ngày bắt đầu & deadline'; }
+}
+
+function renderAll(){
+  if(loading || !state) return;
+  const sched = computeSchedule();
+  plannedFinishMs = (state.startDate && sched.length) ? Math.max(...sched.map(it=>it.end.getTime())) : null;
+  renderHeader(sched);
+  renderCrew(sched);
+  renderGantt(sched);
+  renderTimeline(sched);
+  renderRisks();
+  renderStats(sched);
+  renderRemovedPanel();
+  updateCountdowns();
+}
+
+function tickClock(){
+  document.getElementById('clock').textContent = new Date().toLocaleString('vi-VN',{weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+/* ================= BÁO CÁO PDF ================= */
+function buildReport(){
+  const sched = computeSchedule();
+  const all = allWPs();
+  const now = new Date();
+  const doneList = sched.filter(it=>getStatus(it.wp.id)==='done');
+  const doingList = sched.filter(it=>getStatus(it.wp.id)==='doing'||computeActive(it));
+  const overdueList = sched.filter(computeOverdue);
+  const customList = sched.filter(it=>it.wp.custom);
+  const editedList = all.filter(wp=>state.taskEdits[wp.id] && !wp.custom);
+  const parallelList = sched.filter(it=>it.parallel);
+  const hiddenList = state.removedTasks.map(id=>state.baseTasks.find(w=>w.id===id)).filter(Boolean);
+  const finMs = sched.length ? Math.max(...sched.map(it=>it.end.getTime())) : 0;
+  const leadtimeH = sched.length ? (finMs - sched[0].start.getTime())/3600000 : 0;
+  const deltaH = leadtimeH - (state.baselineH||0);
+  const totalEffort = all.reduce((s,wp)=>s+wp.durationH*wp.baseCrew,0);
+  let ws = 1;
+  if(totalEffort>0){ ws=0; all.forEach(wp=>{ ws += (getCrew(wp)/wp.baseCrew)*((wp.durationH*wp.baseCrew)/totalEffort); }); }
+  const riskAppliedCount = state.risks.filter(r=>r.applied).length;
+  const fmtVN = d => new Date(d).toLocaleString('vi-VN',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  let deadlineHtml = 'Chưa đặt deadline';
+  if(state.deadline && state.startDate && sched.length){
+    const d = new Date(state.deadline).getTime() - finMs;
+    deadlineHtml = 'Deadline: '+fmtVN(state.deadline)+' — lịch dự kiến '+(d>=0?'<span class="tag-ok">về đích trước '+fmtDur(d/3600000)+'</span>':'<span class="tag-late">TRỄ '+fmtDur(-d/3600000)+'</span>');
+  } else if(state.deadline) deadlineHtml = 'Deadline: '+fmtVN(state.deadline);
+
+  const statusLabel = it => {
+    if(computeOverdue(it)) return '<span class="tag-late">Trễ hẹn</span>';
+    const s = getStatus(it.wp.id);
+    if(s==='done') return '<span class="tag-ok">Hoàn thành</span>';
+    if(s==='doing'||computeActive(it)) return 'Đang làm';
+    return 'Chưa bắt đầu';
+  };
+  const rows = sched.map(it=>{
+    const todos = state.wpTodos[it.wp.id]||[];
+    const doneTd = todos.filter(t=>t.done).length;
+    const note = (state.wpNotes[it.wp.id]||'').trim();
+    return '<tr><td>'+esc(displayCode(it.wp))+(it.wp.custom?' (PS)':'')+(it.parallel?' ⇉':'')+'</td>'+
+      '<td>'+esc(it.wp.task)+(note?'<br><i style="font-size:8pt;color:#555;">Ghi chú: '+esc(note.slice(0,160))+(note.length>160?'…':'')+'</i>':'')+'</td>'+
+      '<td>'+statusLabel(it)+'</td><td>'+getCrew(it.wp)+'</td><td>'+fmtDur(it.durationH)+'</td>'+
+      '<td>'+fmtDT(it.start,!!state.startDate)+' → '+fmtDT(it.end,!!state.startDate)+'</td>'+
+      '<td>'+(todos.length?doneTd+'/'+todos.length:'—')+'</td></tr>';
+  }).join('');
+
+  const pts = [];
+  pts.push('Tiến độ: '+doneList.length+'/'+all.length+' giai đoạn hoàn thành ('+(all.length?Math.round(doneList.length/all.length*100):0)+'%)'+(doingList.length?' · đang thi công: '+doingList.map(it=>esc(displayCode(it.wp))).join(', '):'')+'.');
+  if(sched.length) pts.push('Leadtime hiện tại '+fmtDur(leadtimeH)+(state.baselineH?' — '+(Math.abs(deltaH)<0.01?'đúng kế hoạch gốc':((deltaH>0?'dãn thêm ':'rút ngắn ')+fmtDur(Math.abs(deltaH))))+' so với gốc '+fmtDur(state.baselineH):'')+'. Tốc độ đẩy việc '+ws.toFixed(2)+'x.');
+  if(overdueList.length) pts.push('⚠ '+overdueList.length+' giai đoạn quá giờ: '+overdueList.map(it=>esc(displayCode(it.wp))).join(', ')+'.');
+  if(customList.length) pts.push('Phát sinh '+customList.length+' việc: '+customList.map(it=>esc(displayCode(it.wp))+' ('+esc(it.wp.task)+', '+getCrew(it.wp)+' người, '+fmtDur(it.durationH)+')').join('; ')+'.');
+  if(editedList.length) pts.push(editedList.length+' giai đoạn gốc đã điều chỉnh: '+editedList.map(w=>esc(displayCode(w))).join(', ')+'.');
+  if(parallelList.length) pts.push(parallelList.length+' giai đoạn chạy song song: '+parallelList.map(it=>esc(displayCode(it.wp))).join(', ')+'.');
+  if(hiddenList.length) pts.push(hiddenList.length+' giai đoạn đang tạm ẩn: '+hiddenList.map(w=>esc(displayCode(effectiveWP(w)))).join(', ')+'.');
+  pts.push('Rủi ro: đã áp dụng '+riskAppliedCount+'/'+state.risks.length+' biện pháp dự phòng.');
+
+  const riskRows = state.risks.map((r,i)=>'<tr><td>'+String(i+1).padStart(2,'0')+'</td><td>'+esc(r.risk)+'</td><td>'+esc(r.fix)+'</td><td>'+(r.applied?'<span class="tag-ok">Đã áp dụng</span>':'Chưa')+'</td></tr>').join('');
+
+  return '<div class="rp"><h1>Báo cáo thi công — '+esc(state.name)+'</h1>'+
+    '<div class="rp-sub">Xuất lúc '+fmtVN(now)+' · '+(state.startDate?'Bắt đầu: '+esc(state.startDate)+' 13:00':'Chưa đặt ngày bắt đầu')+' · '+deadlineHtml+'</div>'+
+    '<h2>1. Tóm tắt buổi làm việc</h2><ul>'+pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>'+
+    '<div class="rp-grid"><div class="rp-stat"><b>'+(all.length?Math.round(doneList.length/all.length*100):0)+'%</b><span>Tiến độ ('+doneList.length+'/'+all.length+')</span></div>'+
+    '<div class="rp-stat"><b>'+(sched.length?fmtDur(leadtimeH):'—')+'</b><span>Leadtime hiện tại'+(state.baselineH?' (gốc '+fmtDur(state.baselineH)+')':'')+'</span></div>'+
+    '<div class="rp-stat"><b>'+ws.toFixed(2)+'x</b><span>Tốc độ đẩy việc</span></div></div>'+
+    '<h2>2. Chi tiết các giai đoạn</h2><table><tr><th>Mã</th><th>Công việc</th><th>Trạng thái</th><th>Nhân sự</th><th>Thời lượng</th><th>Khung giờ</th><th>Checklist</th></tr>'+rows+'</table>'+
+    (state.risks.length ? '<h2>3. Risk Register</h2><table><tr><th>#</th><th>Rủi ro</th><th>Biện pháp</th><th>Trạng thái</th></tr>'+riskRows+'</table>' : '')+
+    '<div class="rp-foot">Báo cáo tạo tự động · Dự án: '+esc(state.name)+' · ⇉ = song song · (PS) = phát sinh</div></div>';
+}
+
+async function exportPdf(){
+  const btn = document.getElementById('exportPdfBtn');
+  btn.disabled = true; btn.textContent = '⏳ Đang tạo PDF…';
+  try{
+    const view = document.getElementById('reportView');
+    view.innerHTML = buildReport();
+    const fname = 'bao-cao-' + state.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '-' + new Date().toISOString().slice(0,10) + '.pdf';
+    if(typeof html2pdf === 'undefined') throw new Error('lib');
+    await html2pdf().set({
+      margin: [10,8,12,8],
+      filename: fname,
+      image: { type:'jpeg', quality:.95 },
+      html2canvas: { scale:2, useCORS:true, backgroundColor:'#ffffff' },
+      jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
+      pagebreak: { mode:['avoid-all','css','legacy'] }
+    }).from(view.firstElementChild).save();
+    view.innerHTML = '';
+  }catch(e){
+    // Fallback: tải file HTML báo cáo để mở và in thành PDF
+    const html = '<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Báo cáo</title><style>'+
+      document.querySelector('style').textContent.split('/* PDF report')[0] + // reuse nothing heavy
+      '.rp{font-family:sans-serif;color:#111;font-size:12px;line-height:1.5;padding:24px;} .rp table{width:100%;border-collapse:collapse;} .rp th,.rp td{border:1px solid #bbb;padding:4px 6px;} .tag-late{color:#b91c1c;font-weight:bold;} .tag-ok{color:#15803d;font-weight:bold;} .rp-grid{display:flex;gap:8px;} .rp-stat{border:1px solid #bbb;padding:8px;}'+
+      '</style></head><body>'+buildReport()+'</body></html>';
+    const blob = new Blob([html], {type:'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'bao-cao-thi-cong.html';
+    a.click();
+    alert('Không tạo được PDF trực tiếp trong môi trường này — đã tải file báo cáo HTML, mở file đó và Ctrl+P → Save as PDF.');
+  }
+  btn.disabled = false; btn.textContent = '📄 Xuất báo cáo PDF';
+}
+
+/* ================= ĐỒNG BỘ ================= */
+async function pollForUpdates(){
+  if(loading || !state) return;
+  try{
+    const idxStr = await sGet(PROJECTS_KEY, true);
+    if(idxStr){
+      const remote = JSON.parse(idxStr);
+      if(JSON.stringify(remote) !== JSON.stringify(projectsIndex)){
+        projectsIndex = remote;
+        if(!projectsIndex.projects.some(p=>p.id===activeProjectId)){
+          activeProjectId = projectsIndex.projects[0].id;
+          await loadActiveProject();
+          return;
+        }
+        renderProjectSelect();
+      }
+    }
+    const remoteStr = await sGet(projKey(activeProjectId), true);
+    if(remoteStr && remoteStr !== JSON.stringify(state)){
+      state = normalizeState(JSON.parse(remoteStr));
+      syncInputs();
+      renderAll();
+    }
+    const hStr = await sGet(HABITS_KEY, true);
+    if(hStr && hStr !== JSON.stringify(habits)){ habits = JSON.parse(hStr); renderAll(); }
+    const se = document.getElementById('syncStatus');
+    if(se) se.textContent = 'Đồng bộ lúc ' + new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }catch(e){}
+}
+
+/* ================= EVENTS ================= */
+document.getElementById('projectSelect').addEventListener('change', async e => {
+  activeProjectId = e.target.value;
+  await sSet(ACTIVE_KEY, activeProjectId, false);
+  await loadActiveProject();
+});
+document.getElementById('newProjBtn').addEventListener('click', ()=>document.getElementById('newProjPanel').classList.toggle('show'));
+document.getElementById('createProjBtn').addEventListener('click', async ()=>{
+  const name = document.getElementById('newProjName').value.trim();
+  if(!name){ document.getElementById('newProjName').focus(); return; }
+  const tpl = document.getElementById('newProjTemplate').value;
+  document.getElementById('newProjPanel').classList.remove('show');
+  document.getElementById('newProjName').value = '';
+  await createProject(name, tpl);
+});
+document.getElementById('renameProjBtn').addEventListener('click', async ()=>{
+  const meta = projectsIndex.projects.find(p=>p.id===activeProjectId);
+  const name = prompt('Tên mới cho dự án:', meta ? meta.name : '');
+  if(!name || !name.trim()) return;
+  if(meta) meta.name = name.trim();
+  state.name = name.trim();
+  await saveProjectsIndex(); await saveState();
+  syncInputs(); renderAll();
+});
+document.getElementById('delProjBtn').addEventListener('click', deleteActiveProject);
+
+document.getElementById('startDate').addEventListener('change', e=>{ state.startDate = e.target.value||null; saveState(); renderAll(); });
+document.getElementById('deadlineInput').addEventListener('change', e=>{ state.deadline = e.target.value||null; saveState(); renderAll(); });
+document.getElementById('globalGap').addEventListener('change', e=>{ state.globalGap = Math.max(0, Number(e.target.value)||0); saveState(); renderAll(); });
+document.getElementById('crewCapacityInput').addEventListener('change', e=>{
+  state.crewCapacity = Math.max(1, Number(e.target.value)||23);
+  e.target.value = state.crewCapacity;
+  saveState(); renderAll();
+});
+document.getElementById('resetOrderBtn').addEventListener('click', ()=>{ state.order = defaultOrderFull(); saveState(); renderAll(); });
+document.getElementById('removedToggleBtn').addEventListener('click', ()=>document.getElementById('removedPanel').classList.toggle('show'));
+document.getElementById('addTaskToggleBtn').addEventListener('click', ()=>document.getElementById('addTaskPanel').classList.toggle('show'));
+document.getElementById('addTaskSubmitBtn').addEventListener('click', ()=>{
+  const nameEl = document.getElementById('newTaskName');
+  const name = nameEl.value.trim();
+  if(!name){ nameEl.focus(); return; }
+  addCustomTask(name, document.getElementById('newTaskDeliverable').value.trim(),
+    Math.max(1, Number(document.getElementById('newTaskCrew').value)||1),
+    Math.max(0.25, Number(document.getElementById('newTaskDuration').value)||1));
+  nameEl.value=''; document.getElementById('newTaskDeliverable').value='';
+  document.getElementById('newTaskCrew').value=2; document.getElementById('newTaskDuration').value=1;
+  document.getElementById('addTaskPanel').classList.remove('show');
+});
+document.getElementById('exportPdfBtn').addEventListener('click', exportPdf);
+
+/* ============ IMPORT BÁO CÁO → AI LÊN PLAN ============ */
+let lastImportPlan = null;
+
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Không đọc được file'));
+    r.readAsDataURL(file);
+  });
+}
+
+async function runImport(){
+  const statusEl = document.getElementById('importStatus');
+  const resultEl = document.getElementById('importResult');
+  const btn = document.getElementById('importRunBtn');
+  const file = document.getElementById('importFile').files[0];
+  const pasted = document.getElementById('importText').value.trim();
+  const goal = document.getElementById('importGoal').value.trim();
+  if(!file && !pasted){ statusEl.textContent = 'Hãy chọn file báo cáo hoặc dán nội dung trước.'; return; }
+
+  btn.disabled = true; statusEl.textContent = '⏳ AI đang đọc báo cáo và lên plan…'; resultEl.style.display = 'none';
+
+  const instruction = 'Bạn là trợ lý quản lý dự án thi công nội thất. Đọc báo cáo/nội dung được cung cấp, đánh giá tình hình và LÊN KẾ HOẠCH GIAI ĐOẠN TIẾP THEO.' +
+    (goal ? ' Mục tiêu giai đoạn tới do người dùng nêu: "' + goal + '".' : '') +
+    ' Trả về DUY NHẤT một object JSON hợp lệ, không markdown, không giải thích, không ```: ' +
+    '{"projectName":"tên dự án giai đoạn tiếp theo (tiếng Việt, ngắn)","summary":"2-3 câu tóm tắt tình hình từ báo cáo","nextActions":["3-6 hành động ưu tiên cần làm ngay"],"tasks":[{"code":"mã ngắn","task":"tên công việc","deliverable":"kết quả bàn giao","crew":số người,"durationH":số giờ,"category":"một trong: Che chắn / An toàn|Tháo dỡ|Vệ sinh|MEP / Điện nước|Hoàn thiện xây dựng|Nội thất|Sàn / Thảm|Thiết bị|Nghiệm thu / Bàn giao|Mua sắm vật tư|Khác","parallelWithPrev":true nếu chạy song song với việc ngay trước},...tối đa 10 việc],"risks":[{"risk":"...","fix":"..."},...tối đa 5]}. ' +
+    'Ưu tiên các việc còn dang dở, trễ hẹn, phát sinh trong báo cáo. Toàn bộ nội dung bằng tiếng Việt, ngắn gọn.';
+
+  let userContent;
+  try{
+    if(file && file.name.toLowerCase().endsWith('.pdf')){
+      const b64 = await fileToBase64(file);
+      userContent = [
+        { type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } },
+        { type:'text', text: instruction }
+      ];
+    } else {
+      let text = pasted;
+      if(file){ text = await file.text(); }
+      userContent = instruction + '\n\n--- NỘI DUNG BÁO CÁO ---\n' + text.slice(0, 12000);
+    }
+
+    const headers = { 'Content-Type':'application/json' };
+    if(!HAS_CLAUDE_STORAGE){
+      // Bản GitHub Pages: gọi trực tiếp Anthropic API bằng key người dùng tự nhập
+      const apiKey = (document.getElementById('importApiKey').value || '').trim();
+      if(!apiKey){
+        statusEl.textContent = '⚠ Cần nhập Anthropic API key (ô phía trên) để dùng AI trên bản web.';
+        btn.disabled = false; return;
+      }
+      try{ localStorage.setItem(LS_PREFIX + 'apikey', apiKey); }catch(e){}
+      headers['x-api-key'] = apiKey;
+      headers['anthropic-version'] = '2023-06-01';
+      headers['anthropic-dangerous-direct-browser-access'] = 'true';
+    }
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers,
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:userContent}] })
+    });
+    if(!resp.ok){
+      const errBody = await resp.json().catch(()=>null);
+      throw new Error((errBody && errBody.error && errBody.error.message) ? errBody.error.message.slice(0,120) : ('HTTP ' + resp.status));
+    }
+    const data = await resp.json();
+    const raw = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const plan = JSON.parse(clean);
+    if(!plan || !Array.isArray(plan.tasks)) throw new Error('format');
+    lastImportPlan = plan;
+
+    resultEl.style.display = 'block';
+    resultEl.innerHTML =
+      '<div style="font-weight:700;margin-bottom:6px;">📋 ' + esc(plan.projectName||'Kế hoạch tiếp theo') + '</div>' +
+      '<div style="font-size:.84rem;margin-bottom:10px;">' + esc(plan.summary||'') + '</div>' +
+      (Array.isArray(plan.nextActions)&&plan.nextActions.length ? '<div style="font-size:.76rem;font-weight:700;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px;">Hành động ưu tiên</div><ul style="margin:0 0 10px;padding-left:18px;font-size:.84rem;">' + plan.nextActions.map(a=>'<li>'+esc(a)+'</li>').join('') + '</ul>' : '') +
+      '<div style="font-size:.76rem;font-weight:700;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px;">Kế hoạch đề xuất (' + plan.tasks.length + ' việc)</div>' +
+      '<div style="font-size:.82rem;">' + plan.tasks.map(t=>'• <b>'+esc(t.code||'')+'</b> '+esc(t.task||'')+' — '+(t.crew||1)+' người, '+(t.durationH||1)+'g'+(t.parallelWithPrev?' ⇉':'')).join('<br>') + '</div>' +
+      '<div style="margin-top:12px;"><button class="reset-btn" id="importCreateBtn" style="background:var(--cyan);color:#fff;border-color:var(--cyan);">➕ Tạo dự án từ plan này</button></div>';
+    statusEl.textContent = '✓ Đã phân tích xong — xem plan bên dưới.';
+    document.getElementById('importCreateBtn').addEventListener('click', createProjectFromPlan);
+  }catch(e){
+    statusEl.textContent = '⚠ Không phân tích được (' + (e.message||'lỗi') + '). Thử dán nội dung dạng text thay vì PDF, hoặc rút gọn báo cáo.';
+  }
+  btn.disabled = false;
+}
+
+async function createProjectFromPlan(){
+  if(!lastImportPlan) return;
+  const p = lastImportPlan;
+  const tpl = {
+    name: p.projectName || 'Kế hoạch tiếp theo',
+    crewCapacity: state ? (state.crewCapacity||23) : 23,
+    baseTasks: (p.tasks||[]).slice(0,15).map(t=>({
+      code: String(t.code||'').slice(0,30) || undefined,
+      task: String(t.task||'Công việc'),
+      deliverable: String(t.deliverable||'Chưa xác định'),
+      crewLabel: (Number(t.crew)||1) + ' người',
+      baseCrew: Math.max(1, Number(t.crew)||1),
+      durationH: Math.max(0.25, Number(t.durationH)||1),
+      cat: CATEGORIES.includes(t.category) ? t.category : 'Chưa phân loại',
+      par: !!t.parallelWithPrev
+    })),
+    risks: (Array.isArray(p.risks)?p.risks:[]).slice(0,8).map(r=>({risk:String(r.risk||''), fix:String(r.fix||'—')}))
+  };
+  await createProject(tpl.name, tpl);
+  if(Array.isArray(p.nextActions) && p.nextActions.length && state.baseTasks.length){
+    state.wpTodos[state.baseTasks[0].id] = p.nextActions.map(a=>({text:String(a), done:false}));
+    await saveState();
+  }
+  document.getElementById('importPanel').classList.remove('show');
+  renderAll();
+  alert('Đã tạo dự án "' + tpl.name + '" từ plan. Các hành động ưu tiên được đưa vào checklist của công việc đầu tiên.');
+}
+
+document.getElementById('saveTplBtn').addEventListener('click', saveCurrentAsTemplate);
+document.getElementById('importToggleBtn').addEventListener('click', ()=>{
+  document.getElementById('importPanel').classList.toggle('show');
+  document.getElementById('newProjPanel').classList.remove('show');
+});
+document.getElementById('importRunBtn').addEventListener('click', runImport);
+// Bản web (ngoài Claude): hiện ô API key và nạp lại key đã lưu trong trình duyệt
+if(!HAS_CLAUDE_STORAGE){
+  document.getElementById('importKeyRow').style.display = 'block';
+  try{
+    const savedKey = localStorage.getItem(LS_PREFIX + 'apikey');
+    if(savedKey) document.getElementById('importApiKey').value = savedKey;
+  }catch(e){}
+}
+
+document.getElementById('addRiskToggleBtn').addEventListener('click', ()=>document.getElementById('addRiskPanel').classList.toggle('show'));
+document.getElementById('addRiskSubmitBtn').addEventListener('click', ()=>{
+  const nameEl = document.getElementById('newRiskName');
+  const name = nameEl.value.trim();
+  if(!name){ nameEl.focus(); return; }
+  const fix = document.getElementById('newRiskFix').value.trim() || '—';
+  state.risks.push({risk:name, fix, applied:false});
+  nameEl.value = ''; document.getElementById('newRiskFix').value = '';
+  document.getElementById('addRiskPanel').classList.remove('show');
+  saveState(); renderAll();
+});
+document.getElementById('resetRiskBtn').addEventListener('click', ()=>{
+  if(!confirm('Khôi phục Risk Register về danh sách gốc của dự án? Các rủi ro thêm/sửa và trạng thái "Đã áp dụng" sẽ bị xóa.')) return;
+  state.risks = JSON.parse(JSON.stringify(state.risksBaseline||[]));
+  editingRiskIdx = null;
+  saveState(); renderAll();
 });
 
-document.getElementById('deadlineInput').addEventListener('change', (e) => {
-  state.deadline = e.target.value || null;
-  saveState();
-  render();
-});
-
-document.getElementById('crewCapacityInput').addEventListener('change', (e) => {
-  state.crewCapacity = parseInt(e.target.value) || 8;
-  saveState();
-  render();
-});
-
-document.getElementById('addTaskToggleBtn').addEventListener('click', () => {
-  document.getElementById('addTaskPanel').classList.toggle('show');
-});
-
-// Init
-loadState();
-render();
-setInterval(updateClocks, 1000);
+setInterval(()=>{ tickClock(); updateCountdowns(); }, 1000);
+setInterval(pollForUpdates, 4000);
+setInterval(()=>{ if(!loading) renderAll(); }, 30000);
+tickClock();
+initProjects();
 </script>
 </body>
 </html>
