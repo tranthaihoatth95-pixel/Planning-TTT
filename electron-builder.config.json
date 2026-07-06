@@ -1,0 +1,30 @@
+{
+  "name": "planning-ttt",
+  "version": "1.0.0",
+  "description": "Planning TTT - Quản lý công việc & cảnh báo xử lý",
+  "main": "desktop/main.js",
+  "homepage": "./",
+  "author": "Tran Thai Hoa <tranthaihoatth95@gmail.com>",
+  "license": "MIT",
+  "build": {
+    "appId": "com.planning.ttt",
+    "productName": "Planning TTT",
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "win": {
+      "target": ["nsis", "portable"]
+    },
+    "mac": {
+      "target": ["dmg", "zip"]
+    },
+    "linux": {
+      "target": ["AppImage", "deb"]
+    }
+  }
+}
